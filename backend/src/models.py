@@ -8,6 +8,21 @@ class Player(SQLModel, table=True):
     is_active: bool = True
     photo_url: str | None = None
 
+    # career stats
+    total_games_played: int | None = None
+    seasons_played: int | None = None
+
+    career_ppg: float | None = None
+    career_apg: float | None = None
+    career_rpg: float | None = None
+    career_spg: float | None = None
+    career_bpg: float | None = None
+    career_three_pm: float | None = None
+    
+    career_fg_percentage: float | None = None
+    career_three_percentage: float | None = None
+    career_ft_percentage: float | None = None
+
     # linking relationships for easier queries
     seasons: list["PlayerSeason"] = Relationship(back_populates="team")
 
@@ -19,8 +34,6 @@ class PlayerSeason(SQLModel, table=True):
     team: str | None = None
 
     # testable statistics
-    games_played: int
-
     points_per_game: float
     assists_per_game: float
     rebounds_per_game: float
