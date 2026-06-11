@@ -19,7 +19,9 @@ class Player(SQLModel, table=True):
     career_stl: int | None = None
     career_blk: int | None = None
 
-    career_three_pm: float | None = None
+    career_three_pm: int | None = None
+    career_fgm: int | None = None
+    career_ftm: int | None = None
 
     # average stats
     career_ppg: float | None = None
@@ -33,7 +35,7 @@ class Player(SQLModel, table=True):
     career_ft_percentage: float | None = None
 
     # linking relationships for easier queries
-    seasons: list["PlayerSeason"] = Relationship(back_populates="team")
+    seasons: list["PlayerSeason"] = Relationship(back_populates="player")
 
 # 1 to many between Player, PlayerSeason
 class PlayerSeason(SQLModel, table=True):
@@ -43,15 +45,15 @@ class PlayerSeason(SQLModel, table=True):
     team: str | None = None
 
     # testable statistics
-    points_per_game: float
-    assists_per_game: float
-    rebounds_per_game: float
-    steals_per_game: float
-    blocks_per_game: float
-    three_pm_per_game: float
+    points_per_game: float | None = None
+    assists_per_game: float | None = None
+    rebounds_per_game: float | None = None
+    steals_per_game: float | None = None
+    blocks_per_game: float | None = None
+    three_pm_per_game: float | None = None
 
     field_goal_percentage: float | None = None
     three_point_percentage: float | None = None
     free_throw_percentage: float | None = None
 
-    player: Player | None = Relationship(back_populates="team")
+    player: Player | None = Relationship(back_populates="seasons")
