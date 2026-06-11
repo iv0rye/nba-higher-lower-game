@@ -1,0 +1,1 @@
+Backend made with FastAPI and PostgresSQL
