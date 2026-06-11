@@ -13,11 +13,11 @@ class Player(SQLModel, table=True):
     seasons_played: int | None = None
 
     # total stats
-    career_points: int | None = None
-    career_assists: int | None = None
-    career_rebounds: int | None = None
-    career_steals: int | None = None
-    career_blocks: int | None = None
+    career_pts: int | None = None
+    career_ast: int | None = None
+    career_reb: int | None = None
+    career_stl: int | None = None
+    career_blk: int | None = None
 
     career_three_pm: float | None = None
 
