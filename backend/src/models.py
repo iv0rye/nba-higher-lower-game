@@ -12,13 +12,22 @@ class Player(SQLModel, table=True):
     total_games_played: int | None = None
     seasons_played: int | None = None
 
+    # total stats
+    career_points: int | None = None
+    career_assists: int | None = None
+    career_rebounds: int | None = None
+    career_steals: int | None = None
+    career_blocks: int | None = None
+
+    career_three_pm: float | None = None
+
+    # average stats
     career_ppg: float | None = None
     career_apg: float | None = None
     career_rpg: float | None = None
     career_spg: float | None = None
     career_bpg: float | None = None
-    career_three_pm: float | None = None
-    
+
     career_fg_percentage: float | None = None
     career_three_percentage: float | None = None
     career_ft_percentage: float | None = None
