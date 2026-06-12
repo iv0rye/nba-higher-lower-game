@@ -137,16 +137,16 @@ class PlayerSeeder:
 
                 games_played=int(season_gp),
 
-                points_per_game=self.per_game(row["PTS"], season_gp),
-                assists_per_game=self.per_game(row["AST"], season_gp),
-                rebounds_per_game=self.per_game(row["REB"], season_gp),
-                steals_per_game=self.per_game(row["STL"], season_gp),
-                blocks_per_game=self.per_game(row["BLK"], season_gp),
-                three_pm_per_game=self.per_game(row["FG3M"], season_gp),
+                season_ppg=self.per_game(row["PTS"], season_gp),
+                season_apg=self.per_game(row["AST"], season_gp),
+                season_rpg=self.per_game(row["REB"], season_gp),
+                season_spg=self.per_game(row["STL"], season_gp),
+                season_bpg=self.per_game(row["BLK"], season_gp),
+                season_three_pm=self.per_game(row["FG3M"], season_gp),
 
-                field_goal_percentage=round(row["FG_PCT"] * 100, 1) if row["FG_PCT"] > 0 else None,
-                three_point_percentage=round(row["FG3_PCT"] * 100, 1) if row["FG3_PCT"] > 0 else None,
-                free_throw_percentage=round(row["FT_PCT"] * 100, 1) if row["FT_PCT"] > 0 else None,
+                season_fg_percentage=round(row["FG_PCT"] * 100, 1) if row["FG_PCT"] > 0 else None,
+                season_three_percentage=round(row["FG3_PCT"] * 100, 1) if row["FG3_PCT"] > 0 else None,
+                season_ft_percentage=round(row["FT_PCT"] * 100, 1) if row["FT_PCT"] > 0 else None,
             )
 
             self.session.add(season)
