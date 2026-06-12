@@ -92,3 +92,8 @@ class Game(SQLModel, table=True):
     player_b: Player | None = Relationship(
         sa_relationship_kwargs={"foreign_keys": "Game.player_b_id"}
     )
+
+
+class ScoreCount(SQLModel, table=True):
+    score: int = Field(primary_key=True)
+    count: int = 0
