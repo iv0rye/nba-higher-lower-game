@@ -49,16 +49,16 @@ class PlayerSeason(SQLModel, table=True):
     team: str | None = None
 
     # testable statistics
-    points_per_game: float | None = None
-    assists_per_game: float | None = None
-    rebounds_per_game: float | None = None
-    steals_per_game: float | None = None
-    blocks_per_game: float | None = None
-    three_pm_per_game: float | None = None
+    season_ppg: float | None = None
+    season_apg: float | None = None
+    season_rpg: float | None = None
+    season_spg: float | None = None
+    season_bpg: float | None = None
+    season_three_pm: float | None = None
 
-    field_goal_percentage: float | None = None
-    three_point_percentage: float | None = None
-    free_throw_percentage: float | None = None
+    season_fg_percentage: float | None = None
+    season_three_percentage: float | None = None
+    season_ft_percentage: float | None = None
 
     player: Player | None = Relationship(back_populates="seasons")
 
