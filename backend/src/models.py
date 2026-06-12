@@ -1,3 +1,6 @@
+import datetime
+import uuid
+
 from sqlmodel import Field, Relationship, SQLModel
 
 class Player(SQLModel, table=True):
@@ -58,3 +61,34 @@ class PlayerSeason(SQLModel, table=True):
     free_throw_percentage: float | None = None
 
     player: Player | None = Relationship(back_populates="seasons")
+
+# game data model
+# TODO: add expiry system to clean database from old game sessions/games
+class GameSession(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    session_token: str = Field(default_factory=lambda: str(uuid.uuid4()), unique=True)
+    score: int = 0
+    is_active: bool = True
+    created_at: datetime = Field(default_factory=datetime.now())
+
+    rounds: list["Game"] = Relationship(back_populates="session")
+
+
+class Game(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    session_id: int = Field(foreign_key="gamesession.id")
+    player_a_id: int = Field(foreign_key="player.id")
+    player_b_id: int = Field(foreign_key="player.id")
+    stat_category: str
+    stat_type: str
+    season: str | None = None
+    guess: str | None = None
+    is_correct: bool | None = None
+
+    session: GameSession | None = Relationship(back_populates="rounds")
+    player_a: Player | None = Relationship(
+        sa_relationship_kwargs={"foreign_keys": "Game.player_a_id"}
+    )
+    player_b: Player | None = Relationship(
+        sa_relationship_kwargs={"foreign_keys": "Game.player_b_id"}
+    )
