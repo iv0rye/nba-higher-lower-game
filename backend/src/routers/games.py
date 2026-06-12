@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
 router = APIRouter(
-    prefix="\game",
-    tags=["game"],
+    prefix="/game",
+    tags=["game"]
 )

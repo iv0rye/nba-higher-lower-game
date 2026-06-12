@@ -1,3 +1,6 @@
 from fastapi import APIRouter
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/players",
+    tags=["players"]
+)
