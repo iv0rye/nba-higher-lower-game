@@ -1,7 +1,7 @@
 import time
 
-from sqlmodel import Session
-from src.models import Player, PlayerSeason
+from sqlmodel import Session, select
+from src.models import Season, PlayerSeason, Player
 from src.database import engine
 
 from nba_api.stats.static import players
@@ -11,6 +11,13 @@ class PlayerSeeder:
     def __init__(self, engine = engine):
         self.session = Session(engine)
         self.fail_no = 0
+
+        self.all_seasons = {}
+
+        seasons = self.session.exec(select(Season)).all()
+
+        for s in seasons:
+            self.all_seasons[s.label] = s.id
 
     @staticmethod
     def to_int(value):
@@ -126,12 +133,19 @@ class PlayerSeeder:
             season_gp = row["GP"]
 
             if season_gp <= 20:
+                print(f"games played this season is less than 20 ({row["GP"]}). skipping...")
+                continue
+
+            season_id = self.all_seasons[row["SEASON_ID"]]
+
+            if not season_id:
+                print(f"{row["SEASON_ID"]} season ID was not found. skipping...")
                 continue
 
             season = PlayerSeason(
                 player_id=player.id,
+                season_id=season_id,
 
-                season=row["SEASON_ID"],
                 team=row["TEAM_ABBREVIATION"],
 
                 season_ppg=self.per_game(row["PTS"], season_gp),
