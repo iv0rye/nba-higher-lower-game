@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from sqlmodel import select
-
+from .routers import games, players, seasons
 from .dependencies import SessionDep
 from .database import create_db_and_tables, get_session, engine
 from . import models   # for initialising database
@@ -13,7 +13,12 @@ async def lifespan(app: FastAPI):
     yield
     engine.dispose()
 
+
 app = FastAPI(lifespan=lifespan)
+
+app.include_router(games.router)
+app.include_router(players.router)
+app.include_router(seasons.router)
 
 # @app.get("/")
 # async def root(session: SessionDep):

@@ -1,5 +1,7 @@
-from fastapi import APIRouter
-from services import player_service
+from fastapi import APIRouter, Depends
+from sqlmodel import Session
+from src.database import get_session
+from src.services.player_service import PlayerService
 
 router = APIRouter(
     prefix="/players",
@@ -7,5 +9,5 @@ router = APIRouter(
 )
 
 @router.get("/")
-async def get_players(q: str | None = None):
-    return player_service.get_players(q)
+async def get_players(name: str | None = None, session: Session = Depends(get_session)):
+    return PlayerService.get_players(name, session)
