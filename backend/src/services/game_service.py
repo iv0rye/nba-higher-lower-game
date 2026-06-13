@@ -58,9 +58,14 @@ class GameService:
 
         # find new players
         if cur_session.stat_type.lower() == "career":
-            player_a, player_b = GameService.generate_player_in_category(
+            player_a, player_b = GameService.generate_players_career(
                 cur_session.stat_category, 
-                cur_session.stat_type, 
+                seen_players,
+                session
+            )
+        elif cur_session.stat_type.lower() == "season":
+            player_a, player_b = GameService.generate_players_season(
+                cur_session.stat_category, 
                 seen_players,
                 session
             )
@@ -71,7 +76,7 @@ class GameService:
 
 
     @staticmethod
-    def generate_players_career_cat(cat: str, seen_players: list[int], session) -> tuple[Player, Player]: 
+    def generate_players_career(cat: str, seen_players: list[int], session) -> tuple[Player, Player]: 
         """
         helper function to generate random player[s] based on a career based game session
         """    
@@ -92,7 +97,7 @@ class GameService:
         
 
     @staticmethod
-    def generate_players_season_cat(cat: str, seen_players: list[int], seasons: list[int], session) -> tuple[Player, Player]:
+    def generate_players_season(cat: str, seen_players: list[int], seasons: list[int], session) -> tuple[Player, Player]:
         """
         helper function to generate random player[s] based on a season based game session
         """
