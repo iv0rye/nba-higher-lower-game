@@ -13,19 +13,19 @@ async def lifespan(app: FastAPI):
     yield
     engine.dispose()
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
-@app.get("/")
-async def root(session: SessionDep):
-    res = session.exec(
-        select(models.PlayerSeason, models.Player)
-        .join(models.Player, models.PlayerSeason.player_id == models.Player.id)
-        .where(models.PlayerSeason.season == '2010-11')
-    ).all() 
+# @app.get("/")
+# async def root(session: SessionDep):
+#     res = session.exec(
+#         select(models.PlayerSeason, models.Player)
+#         .join(models.Player, models.PlayerSeason.player_id == models.Player.id)
+#         .where(models.PlayerSeason.season == '2010-11')
+#     ).all() 
 
-    return [
-    {
-        "season": season,
-        "player": player,
-    } for season, player in res
-    ]
+#     return [
+#     {
+#         "season": season,
+#         "player": player,
+#     } for season, player in res
+#     ]

@@ -63,7 +63,7 @@ class PlayerSeeder:
         return all_players
     
 
-    def seed_player(self, p: dict, df, all_star_ids) -> Player:
+    def seed_player(self, p: dict, df) -> Player:
         total_gp = int(df["GP"].sum())
 
         pts = df["PTS"].sum()
@@ -84,7 +84,6 @@ class PlayerSeeder:
             name=p["full_name"],
             position=p.get("position"),
             is_active=p["is_active"],
-            is_all_star=p['id'] in all_star_ids,
             # gets player photo with player id on CDN link
             photo_url=f"https://cdn.nba.com/headshots/nba/latest/1040x760/{p['id']}.png",
 
@@ -154,7 +153,6 @@ class PlayerSeeder:
 
     def generate(self):
         all_players = self.get_players()
-        all_star_ids = set(df["PLAYER_ID"].unique())
 
         with self.session:
             for p in all_players:
@@ -169,7 +167,7 @@ class PlayerSeeder:
                     if df.empty or int(df["GP"].sum()) < 50:
                         continue 
 
-                    player = self.seed_player(p, df, all_star_ids)
+                    player = self.seed_player(p, df)
 
                     self.seed_player_seasons(player, df)
 

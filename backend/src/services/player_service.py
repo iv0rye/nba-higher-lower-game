@@ -7,4 +7,4 @@ from src.models import Player
 class PlayerService:
     @staticmethod
     def get_players(q):
-        pass
+        return q

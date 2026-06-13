@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import uuid
 
 from sqlmodel import Field, Relationship, SQLModel
@@ -9,7 +9,6 @@ class Player(SQLModel, table=True):
     name: str
     positions: str | None = None
     is_active: bool = True
-    is_all_star: bool = False
     photo_url: str | None = None
 
     # career stats
