@@ -69,9 +69,15 @@ class GameService:
                 seen_players,
                 session
             )
-
+        else:
+            raise HTTPException(status_code=404, detail=f"Game session entry {cur_session.id} has invalid stat type")
+        
         new_game = Game(
             guess_a_higher_b=None,
+            is_correct=None,
+            session_id=cur_session.id,
+            player_a_id=player_a.id,
+            player_b_id=player_b.id
         )
 
 

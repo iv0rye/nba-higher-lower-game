@@ -32,13 +32,22 @@ class Game(GameBase, table=True):
     session_id: int = Field(foreign_key="gamesession.id")
     player_a_id: int = Field(foreign_key="player.id")
     player_b_id: int = Field(foreign_key="player.id")
+    player_season_a_id: int | None = Field(default=None, foreign_key="playerseason.id")
+    player_season_b_id: int | None = Field(default=None, foreign_key="playerseason.id")
 
     session: GameSession | None = Relationship(back_populates="rounds")
-    player_a: Optional["Player"] = Relationship(    # type: ignore (forward depency resolution)
+    
+    player_a: Optional["Player"] = Relationship(                            # type: ignore (forward depency resolution)
         sa_relationship_kwargs={"foreign_keys": "Game.player_a_id"}
     )
-    player_b: Optional["Player"] = Relationship(    # type: ignore (forward depency resolution)
+    player_b: Optional["Player"] = Relationship(                            # type: ignore (forward depency resolution)
         sa_relationship_kwargs={"foreign_keys": "Game.player_b_id"}
+    )   
+    player_season_a: Optional["PlayerSeason"] = Relationship(               # type: ignore (forward depency resolution)
+        sa_relationship_kwargs={"foreign_keys": "Game.player_season_a_id"}
+    )           
+    player_season_b: Optional["PlayerSeason"] = Relationship(               # type: ignore (forward depency resolution)
+        sa_relationship_kwargs={"foreign_keys": "Game.player_season_b_id"}
     )
 
 
