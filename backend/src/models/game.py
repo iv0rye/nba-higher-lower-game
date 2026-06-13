@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 import uuid
-from sqlmodel import ARRAY, Column, Field, Relationship, SQLModel, String
+from sqlmodel import Field, Relationship, SQLModel
 from .game_season import GameSessionSeason
 
 # base classes

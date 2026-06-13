@@ -4,12 +4,20 @@ from src.routers.games import StartGameRequest
 
 
 class GameService:
+    CURRENT_SEASON = '2025-26'
+
     @staticmethod
     def start_game(cat: str, stat_type: str, body: StartGameRequest, session):
-        game_seasons: list[Season] = session.exec(
-            select(Season)
-            .where(Season.label.in_(body.seasons))
-        ).all()
+        if not body.seasons or len(body.seasons) <= 0:
+            game_seasons: list[Season] = session.exec(
+                select(Season)
+                .where(Season.label == GameService.CURRENT_SEASON)
+            ).all()
+        else:
+            game_seasons: list[Season] = session.exec(
+                select(Season)
+                .where(Season.label.in_(body.seasons))
+            ).all()
 
         new_game_session = GameSession(
             score=0,
