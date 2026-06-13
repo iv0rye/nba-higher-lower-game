@@ -57,24 +57,24 @@ class GameService:
             seen_players.append(game_round.player_b_id)
 
         # find new players
-        player_a, player_b = GameService.generate_player_in_category(
-            cur_session.stat_category, 
-            cur_session.stat_type, 
-            seen_players,
-            session
-        )
-
-        a_higher_b: bool = True if player_a.
+        if cur_session.stat_type.lower() == "career":
+            player_a, player_b = GameService.generate_player_in_category(
+                cur_session.stat_category, 
+                cur_session.stat_type, 
+                seen_players,
+                session
+            )
 
         new_game = Game(
             guess_a_higher_b=None,
-            is_a_higher_b=None,
-
         )
 
 
     @staticmethod
-    def generate_players_career_cat(cat: str, seen_players: list[int], session) -> tuple[Player, Player, bool]:     
+    def generate_players_career_cat(cat: str, seen_players: list[int], session) -> tuple[Player, Player]: 
+        """
+        helper function to generate random player[s] based on a career based game session
+        """    
         if cat not in CAREER_STAT_CATEGORIES:
             raise HTTPException(status_code=404, detail="Career category type is invalid")
         
@@ -88,60 +88,50 @@ class GameService:
             .limit(100)
         ).all()
         
-        # return 2 random players if no seen players, AKA new game
-        if not seen_players:
-            player_a, player_b = random.sample(available_players, 2)
-        else:
-            available_players = [p for p in available_players if p.id not in seen_players]
-            if not available_players:
-                raise HTTPException(status_code=409, detail="No more players available")
-
-            player_a = session.get(Player, seen_players[-1])
-            player_b = random.choice(available_players)
-
-        # gets correct answer (if a is higher than b)
-        a_higher_b = getattr(player_a, attr_name) >= getattr(player_b, attr_name)
-        return (player_a, player_b, a_higher_b)
+        return GameService.select_players(available_players, seen_players, session)
         
 
     @staticmethod
-    def generate_players_season_cat(cat: str, seen_players: list[int], session) -> tuple[Player, Player, bool]:
+    def generate_players_season_cat(cat: str, seen_players: list[int], seasons: list[int], session) -> tuple[Player, Player]:
+        """
+        helper function to generate random player[s] based on a season based game session
+        """
         if cat not in SEASON_STAT_CATEGORIES:
             raise HTTPException(status_code=404, detail="Season category type is invalid")
 
         attr_name = f"season_{cat}"
         cat_col = getattr(PlayerSeason, attr_name)
 
+        season = random.choice(seasons)
+
         # get top 100 players of specified career cat
         available_players = session.exec(
             select(Player)
             .join(PlayerSeason, PlayerSeason.player_id == Player.id)
+            .where(PlayerSeason.season_id == season.id)
             .order_by(cat_col.desc())
             .limit(50)
         ).all()
 
+        return GameService.select_players(available_players, seen_players, session)
+
+
+    @staticmethod
+    def select_players(available_players: list[Player], seen_players: list[int], session) -> tuple[Player, Player]:
+        """
+        helper function to select random player[s] (depending on whether seen_players exist or not (implying if game is new or not))
+        """
         # return 2 random players if no seen players, AKA new game
         if not seen_players:
             player_a, player_b = random.sample(available_players, 2)
-        else:
-            available_players = [p for p in available_players if p.id not in seen_players]
-            if not available_players:
-                raise HTTPException(status_code=409, detail="No more players available")
+            return (player_a, player_b)
 
-            player_a = session.get(Player, seen_players[-1])
-            player_b = random.choice(available_players)
+        available_players = [p for p in available_players if p.id not in seen_players]
 
-        player_season_a = session.exec(
-            select(PlayerSeason)
-            .where(PlayerSeason.player_id == player_a.id, PlayerSeason.season_id.in_(season_ids))
-        ).first()
+        if not available_players:
+            raise HTTPException(status_code=409, detail="No more players available")
 
-        player_season_b = session.exec(
-            select(PlayerSeason)
-            .where(PlayerSeason.player_id == player_b.id, PlayerSeason.season_id.in_(season_ids))
-        ).first()
+        player_a = session.get(Player, seen_players[-1])
+        player_b = random.choice(available_players)
 
-        a_higher_b = getattr(player_season_a, attr_name) >= getattr(player_season_b, attr_name)
-        return (player_a, player_b, a_higher_b)
-
-
+        return (player_a, player_b)
