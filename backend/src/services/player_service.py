@@ -1,7 +1,7 @@
 from typing import Any
 
 from sqlmodel import func, select
-from src.models import Player
+from src.models.player import Player
 
 
 class PlayerService:
