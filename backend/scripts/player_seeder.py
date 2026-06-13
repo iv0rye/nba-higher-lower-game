@@ -136,7 +136,7 @@ class PlayerSeeder:
                 print(f"games played this season is less than 20 ({row["GP"]}). skipping...")
                 continue
 
-            season_id = self.all_seasons[row["SEASON_ID"]]
+            season_id = self.all_seasons.get(row["SEASON_ID"])
 
             if not season_id:
                 print(f"{row["SEASON_ID"]} season ID was not found. skipping...")
