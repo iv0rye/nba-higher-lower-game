@@ -38,10 +38,10 @@ class GameService:
 
         session.refresh(new_game_session)
         
-        return GameService.generate_new_game(new_game_session.session_token, session)
+        return GameService.generate_new_game_round(new_game_session.session_token, session)
     
     @staticmethod
-    def generate_new_game(session_token: str, session):
+    def generate_new_game_round(session_token: str, session):
         cur_session = session.exec(
             select(GameSession)
             .where(GameSession.session_token == session_token)
