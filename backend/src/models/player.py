@@ -2,6 +2,11 @@ from sqlmodel import Field, Relationship, SQLModel
 from .player_season import PlayerSeason
 from .player_season import PlayerSeasonRead
 
+# set to validate stat category
+CAREER_STAT_CATEGORIES = {
+    "pts", "ast", "reb", "stl", "blk", "three_pm", "fgm", "ftm",
+    "ppg", "apg", "rpg", "spg", "bpg", "fg_percentage", "three_percentage", "ft_percentage"
+}
 
 class PlayerBase(SQLModel):
     nba_id: int = Field(unique=True)

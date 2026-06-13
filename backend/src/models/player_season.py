@@ -1,6 +1,12 @@
 from typing import Optional
 from sqlmodel import Field, Relationship, SQLModel
 
+# set to validate season stat category strings
+SEASON_STAT_CATEGORIES = {
+    "ppg", "apg", "rpg", "spg", "bpg", "three_pm",
+    "fg_percentage", "three_percentage", "ft_percentage"
+}
+
 class PlayerSeasonBase(SQLModel):
     team: str | None = None
 
