@@ -1,6 +1,8 @@
+import random
+
 from fastapi import HTTPException
 from sqlmodel import select
-from models import Player
+from models import Player, PlayerSeason
 from models.player import CAREER_STAT_CATEGORIES
 from models.player_season import SEASON_STAT_CATEGORIES
 from src.models import GameSession, Season, Game
@@ -65,17 +67,51 @@ class GameService:
         )
 
     @staticmethod
-    def generate_players_in_category(cat: str, session_type: str, session):
+    def generate_player_in_category(cat: str, session_type: str, session, seen_players: list[int] | None = None) -> tuple[Player, Player]:
         if session_type == "career":
             if cat not in CAREER_STAT_CATEGORIES:
                 raise HTTPException(status_code=404, detail="Career category type is invalid")
+            
+            # get top 100 players of specified career cat
+            cat_col = getattr(Player, f"career_{cat}")
+
+            available_players = session.exec(
+                select(Player)
+                .order_by(cat_col.desc())
+                .limit(100)
+            ).all()
             
         elif session_type == "season":
             if cat not in SEASON_STAT_CATEGORIES:
                 raise HTTPException(status_code=404, detail="Season category type is invalid")
             
+            # get top 50 players of specified season cat
+            cat_col = getattr(PlayerSeason, f"season_{cat}")
+
+            available_players = session.exec(
+                select(Player)
+                .join(PlayerSeason, PlayerSeason.player_id == Player.id)
+                .order_by(cat_col.desc())
+                .limit(50)
+            ).all()
+
         else:
             raise HTTPException(status_code=404, detail="Game session type is invalid")
+        
+        # return 2 random players if no seen players, AKA new game
+        if not seen_players:
+            return tuple(random.sample(available_players, 2))
+
+        available_players = [p for p in available_players if p.id not in seen_players]
+
+        if not available_players:
+            raise HTTPException(status_code=409, detail="No more players available")
+    
+        last_seen_player = session.get(Player, seen_players[-1])
+
+        return (last_seen_player, random.choice(available_players))
+        
+
 
 
 
