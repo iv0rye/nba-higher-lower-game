@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 import uuid
 from sqlmodel import ARRAY, Column, Field, Relationship, SQLModel, String
+from .game_season import GameSessionSeason
 
 # base classes
 class GameSessionBase(SQLModel):
@@ -9,8 +10,7 @@ class GameSessionBase(SQLModel):
     is_active: bool = True
     stat_category: str
     stat_type: str
-    seasons: list[str] = Field(default=[], sa_column=Column(ARRAY(String)))
-
+    
 
 class GameBase(SQLModel):
     guess: str | None = None
@@ -22,7 +22,9 @@ class GameSession(GameSessionBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     session_token: str = Field(default_factory=lambda: str(uuid.uuid4()), unique=True)
     created_at: datetime = Field(default_factory=datetime.now)
+
     rounds: list["Game"] = Relationship(back_populates="session")
+    seasons: list["Season"] = Relationship(back_populates="sessions", link_model=GameSessionSeason) # type: ignore (forward depency resolution)
 
 
 class Game(GameBase, table=True):
