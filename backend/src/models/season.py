@@ -1,4 +1,4 @@
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 class SeasonBase(SQLModel):
     label: str
@@ -8,6 +8,8 @@ class SeasonBase(SQLModel):
 
 class Season(SeasonBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
+
+    player_seasons: list["PlayerSeason"] = Relationship(back_populates="season")
 
 
 class SeasonRead(SeasonBase):

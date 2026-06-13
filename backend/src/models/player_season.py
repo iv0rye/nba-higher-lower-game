@@ -2,7 +2,6 @@ from typing import Optional
 from sqlmodel import Field, Relationship, SQLModel
 
 class PlayerSeasonBase(SQLModel):
-    season: str
     team: str | None = None
 
     season_ppg: float | None = None
@@ -21,7 +20,10 @@ class PlayerSeasonBase(SQLModel):
 class PlayerSeason(PlayerSeasonBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     player_id: int = Field(foreign_key="player.id")
+    season_id: int = Field(foreign_key="season.id")
+    
     player: Optional["Player"] = Relationship(back_populates="seasons")
+    season: Optional["Season"] = Relationship(back_populates="player_seasons")
 
 
 class PlayerSeasonRead(PlayerSeasonBase):

@@ -134,8 +134,6 @@ class PlayerSeeder:
                 season=row["SEASON_ID"],
                 team=row["TEAM_ABBREVIATION"],
 
-                games_played=int(season_gp),
-
                 season_ppg=self.per_game(row["PTS"], season_gp),
                 season_apg=self.per_game(row["AST"], season_gp),
                 season_rpg=self.per_game(row["REB"], season_gp),
