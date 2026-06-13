@@ -21,10 +21,14 @@ class PlayerSeason(PlayerSeasonBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     player_id: int = Field(foreign_key="player.id")
     season_id: int = Field(foreign_key="season.id")
-    
+
     player: Optional["Player"] = Relationship(back_populates="seasons")
     season: Optional["Season"] = Relationship(back_populates="player_seasons")
 
 
 class PlayerSeasonRead(PlayerSeasonBase):
     id: int
+
+class SeasonPlayerRead(PlayerSeasonBase):
+    id: int
+    player: Optional["PlayerRead"] = None

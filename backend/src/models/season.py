@@ -14,4 +14,4 @@ class Season(SeasonBase, table=True):
 
 class SeasonRead(SeasonBase):
     id: int
-    player_seasons: list["PlayerSeasonRead"] = []
+    player_seasons: list["SeasonPlayerRead"] = []
