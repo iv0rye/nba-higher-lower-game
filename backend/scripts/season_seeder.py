@@ -1,9 +1,9 @@
-from enum import Enum
+from enum import IntEnum
 from sqlmodel import Session
 from src.models.season import Season
 from src.database import engine
 
-class Range(Enum):
+class Range(IntEnum):
     MIN = 0
     MAX = 1
 
