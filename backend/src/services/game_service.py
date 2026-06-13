@@ -37,8 +37,8 @@ class GameService:
         session.commit()
 
         session.refresh(new_game_session)
-        #TODO: use generate new game here and return results
-        return
+        
+        return GameService.generate_new_game(new_game_session.session_token, session)
     
     @staticmethod
     def generate_new_game(session_token: str, session):
@@ -56,6 +56,10 @@ class GameService:
             seen_players.append(game_round.player_a_id)
             seen_players.append(game_round.player_b_id)
 
+        # initialised only if game is in season type/mode
+        player_season_a = None
+        player_season_b = None
+
         # find new players
         if cur_session.stat_type.lower() == "career":
             player_a, player_b = GameService.generate_players_career(
@@ -63,12 +67,23 @@ class GameService:
                 seen_players,
                 session
             )
+
         elif cur_session.stat_type.lower() == "season":
-            player_a, player_b = GameService.generate_players_season(
+            # find player season of last round to bring to this round
+            prev_player_season_b = None
+
+            if cur_session.rounds:
+                last_round = cur_session.rounds[-1]
+                prev_player_season_b = last_round.player_season_b
+
+            player_a, player_b, player_season_a, player_season_b = GameService.generate_players_season(
                 cur_session.stat_category, 
                 seen_players,
-                session
+                cur_session.seasons,
+                prev_player_season_b,
+                session,
             )
+
         else:
             raise HTTPException(status_code=404, detail=f"Game session entry {cur_session.id} has invalid stat type")
         
@@ -77,8 +92,16 @@ class GameService:
             is_correct=None,
             session_id=cur_session.id,
             player_a_id=player_a.id,
-            player_b_id=player_b.id
+            player_b_id=player_b.id,
+            player_season_a_id=player_season_a.id if player_season_a else None,
+            player_season_b_id=player_season_b.id if player_season_b else None
         )
+
+        session.add(new_game)
+        session.commit()
+        session.refresh(new_game)
+
+        return new_game
 
 
     @staticmethod
@@ -103,7 +126,7 @@ class GameService:
         
 
     @staticmethod
-    def generate_players_season(cat: str, seen_players: list[int], seasons: list[int], session) -> tuple[Player, Player]:
+    def generate_players_season(cat: str, seen_players: list[int], seasons: list[Season], session, prev_player_season_b: PlayerSeason | None = None) -> tuple[Player, Player]:
         """
         helper function to generate random player[s] based on a season based game session
         """
@@ -124,7 +147,26 @@ class GameService:
             .limit(50)
         ).all()
 
-        return GameService.select_players(available_players, seen_players, session)
+        player_a, player_b = GameService.select_players(available_players, seen_players, session)
+
+        if prev_player_season_b is not None:
+            # carry over player_a's season from previous round's player_b
+            player_season_a = prev_player_season_b
+        else:
+            player_season_a = session.exec(
+                select(PlayerSeason)
+                .where(PlayerSeason.player_id == player_a.id, PlayerSeason.season_id == season.id)
+            ).first()
+
+        player_season_b = session.exec(
+            select(PlayerSeason)
+            .where(PlayerSeason.player_id == player_b.id, PlayerSeason.season_id == season.id)
+        ).first()
+
+        if not player_season_a or not player_season_b:
+            raise HTTPException(status_code=409, detail="Player missing stats for selected season")
+
+        return (player_a, player_b, player_season_a, player_season_b)
 
 
     @staticmethod
