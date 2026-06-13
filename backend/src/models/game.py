@@ -1,18 +1,18 @@
 from datetime import datetime
 from typing import Optional
 import uuid
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import ARRAY, Column, Field, Relationship, SQLModel, String
 
 # base classes
 class GameSessionBase(SQLModel):
     score: int = 0
     is_active: bool = True
+    stat_category: str
+    stat_type: str
+    seasons: list[str] = Field(default=[], sa_column=Column(ARRAY(String)))
 
 
 class GameBase(SQLModel):
-    stat_category: str
-    stat_type: str
-    season: str | None = None
     guess: str | None = None
     is_correct: bool | None = None
 
@@ -32,10 +32,10 @@ class Game(GameBase, table=True):
     player_b_id: int = Field(foreign_key="player.id")
 
     session: GameSession | None = Relationship(back_populates="rounds")
-    player_a: Optional["Player"] = Relationship(
+    player_a: Optional["Player"] = Relationship(    # type: ignore (forward depency resolution)
         sa_relationship_kwargs={"foreign_keys": "Game.player_a_id"}
     )
-    player_b: Optional["Player"] = Relationship(
+    player_b: Optional["Player"] = Relationship(    # type: ignore (forward depency resolution)
         sa_relationship_kwargs={"foreign_keys": "Game.player_b_id"}
     )
 

@@ -9,9 +9,9 @@ class SeasonBase(SQLModel):
 class Season(SeasonBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
 
-    player_seasons: list["PlayerSeason"] = Relationship(back_populates="season")
+    player_seasons: list["PlayerSeason"] = Relationship(back_populates="season")    # type: ignore (forward depency resolution)
 
 
 class SeasonRead(SeasonBase):
     id: int
-    player_seasons: list["SeasonPlayerRead"] = []
+    player_seasons: list["SeasonPlayerRead"] = []   # type: ignore (forward depency resolution)

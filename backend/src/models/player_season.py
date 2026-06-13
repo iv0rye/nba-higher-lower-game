@@ -22,8 +22,8 @@ class PlayerSeason(PlayerSeasonBase, table=True):
     player_id: int = Field(foreign_key="player.id")
     season_id: int = Field(foreign_key="season.id")
 
-    player: Optional["Player"] = Relationship(back_populates="seasons")
-    season: Optional["Season"] = Relationship(back_populates="player_seasons")
+    player: Optional["Player"] = Relationship(back_populates="seasons")         # type: ignore (forward depency resolution)
+    season: Optional["Season"] = Relationship(back_populates="player_seasons")  # type: ignore (forward depency resolution)
 
 
 class PlayerSeasonRead(PlayerSeasonBase):
@@ -31,4 +31,4 @@ class PlayerSeasonRead(PlayerSeasonBase):
 
 class SeasonPlayerRead(PlayerSeasonBase):
     id: int
-    player: Optional["PlayerRead"] = None
+    player: Optional["PlayerRead"] = None   # type: ignore (forward depency resolution)
