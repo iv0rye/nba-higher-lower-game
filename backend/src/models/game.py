@@ -13,7 +13,8 @@ class GameSessionBase(SQLModel):
     
 
 class GameBase(SQLModel):
-    guess: str | None = None
+    guess_a_higher_b: bool | None = None
+    is_a_higher_b: bool | None = None
     is_correct: bool | None = None
 
 # sql tables
