@@ -44,6 +44,7 @@ class GameService:
 
         return NewGameResponse(
             session_token=new_game_session.session_token,
+            game_id=new_game.id,
             stat_category=new_game_session.stat_category,
             stat_type=new_game_session.stat_type,
             player_a=player_a_stat,

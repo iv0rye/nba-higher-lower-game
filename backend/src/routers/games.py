@@ -14,6 +14,6 @@ router = APIRouter(
 async def start_game(category: str, type: str, body: StartGameRequest, session: Session = Depends(get_session)):
     return GameService.start_game(category, type, body, session)
 
-@router.post("/guess/{token}/{is_a_over_b}", response_model=NewGameResponse)
-async def game_guess(token: str, is_a_over_b: bool, session: Session = Depends(get_session)):
-    return GameService.game_guess(token, is_a_over_b, session)
+@router.post("/guess", response_model=NewGameResponse)
+async def game_guess(req, session: Session = Depends(get_session)):
+    return GameService.game_guess(req, session)
