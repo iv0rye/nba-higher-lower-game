@@ -51,6 +51,10 @@ class GameService:
         )
     
     @staticmethod
+    def game_guess(token: str, is_a_over_b: bool, session) -> NewGameResponse:
+        pass
+    
+    @staticmethod
     def generate_new_game_round(session_token: str, session):
         cur_session = session.exec(
             select(GameSession)
