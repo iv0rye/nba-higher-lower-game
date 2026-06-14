@@ -83,7 +83,19 @@ class GameService:
         cur_game = session.exec(
             select(Game)
             .where(Game.id == req.game_id)
-        )
+        ).one_or_none()
+
+        if not cur_game:
+            raise HTTPException(status_code=404, detail="Game round not found")
+
+        if cur_game.session_id != cur_session.id:
+            raise HTTPException(status_code=404, detail="Game round does not belong to this session")
+        
+        if cur_game.is_correct is not None:
+            raise HTTPException(status_code=409, detail="This round has already been answered")
+        
+        if cur_session.is_active is False:
+            raise HTTPException(status_code=409, detail="This game session has already ended")
 
         cur_player_a_stat: PlayerStatRead = GameService.get_player_stat(cur_game, cur_session, session, 'a')
         cur_player_b_stat: PlayerStatRead = GameService.get_player_stat(cur_game, cur_session, session, 'b')
@@ -92,11 +104,21 @@ class GameService:
             or (not req.is_a_over_b and cur_player_a_stat.stat_value <= cur_player_b_stat.stat_value))
         
         if correct_guess: 
+            # update cur game and session to reflect correct guess
+            cur_game.guess_a_higher_b = req.is_a_over_b
+            cur_game.is_correct = True
+
+            cur_session.score += 1
+
+            session.add(cur_session)
+            session.add(cur_game)
+            session.commit()
+
             # new_game_round is of Game, new_game_round_res is what is being responded to call
-            new_game_round: Game = GameService.generate_new_game_round(req.session_token, session)
+            new_game_round: Game = GameService.generate_new_game_round(req.session_token, session, cur_game.player_b)
 
             player_a_stat: PlayerStatRead = cur_player_b_stat
-            player_b_stat: PlayerStatRead = GameService.get_player_stat(cur_game, cur_session, session, 'b')
+            player_b_stat: PlayerStatRead = GameService.get_player_stat(new_game_round, cur_session, session, 'b')
 
             new_game_round_res = NewGameResponse(
                 session_token=cur_session.session_token,
@@ -106,6 +128,33 @@ class GameService:
                 player_a=player_a_stat,
                 player_b=player_b_stat
             )
+
+            return GuessResponse(
+                is_correct=True,
+                score=cur_session.score,
+                session_active=True,
+                player_b=cur_player_b_stat,
+                next_round=new_game_round_res
+            )
+        
+        # update cur game and session to reflect incorrect guess
+        cur_game.guess_a_higher_b = req.is_a_over_b
+        cur_game.is_correct = False
+
+        cur_session.is_active = False
+
+        session.add(cur_session)
+        session.add(cur_game)
+        session.commit()
+
+        return GuessResponse(
+            is_correct=False,
+            score=cur_session.score,
+            session_active=False,
+            player_b=cur_player_b_stat,
+            next_round=None
+        )
+
     
     @staticmethod
     def generate_new_game_round(session_token: str, session, prev_player: Player | None = None) -> Game:
