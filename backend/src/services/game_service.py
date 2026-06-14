@@ -37,7 +37,16 @@ class GameService:
 
         session.refresh(new_game_session)
         
-        return GameService.generate_new_game_round(new_game_session.session_token, session)
+        new_game = GameService.generate_new_game_round(new_game_session.session_token, session)
+    
+        player_a_stat = GameService.get_player_a_stat(new_game, new_game_session, session)
+
+        return StartGameResponse(
+            session_token=new_game_session.session_token,
+            stat_category=new_game_session.stat_category,
+            stat_type=new_game_session.stat_type,
+            player_a=player_a_stat,
+        )
     
     @staticmethod
     def generate_new_game_round(session_token: str, session):
