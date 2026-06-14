@@ -79,8 +79,8 @@ class GameService:
                 cur_session.stat_category, 
                 seen_players,
                 cur_session.seasons,
-                prev_player_season_b,
                 session,
+                prev_player_season_b
             )
 
         else:
