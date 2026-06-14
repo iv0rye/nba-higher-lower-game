@@ -13,6 +13,19 @@ class GameService:
 
     @staticmethod
     def start_game(cat: str, stat_type: str, body: StartGameRequest, session) -> NewGameResponse:
+        """
+        Starts a game. Function inits a GameSession row, adds it, and then runs generate new game round to generate initial game round.
+        Also runs get_player_stat to get the generated player stats in the response format.
+
+        Args:
+            cat: string containing category of game (eg. ppg (points per game))
+            stat_type: string containing type of game (in set {career, season})
+            body: body for request of starting game. as of now only contains seasons
+            session: database session
+
+        Return:
+            returns the first game round of the new game session
+        """
         if not body.seasons or len(body.seasons) <= 0:
             game_seasons: list[Season] = session.exec(
                 select(Season)
@@ -53,23 +66,36 @@ class GameService:
     
     @staticmethod
     def game_guess(req: GuessRequest, session) -> GuessResponse:
+        """
+        Function that runs when guessing a game round. Gets current game session and round
+        and calculates if the guess is correct. If it is, generates new round, if not, does not.
+
+        Args:
+            req: GameRequest containing session_id, game_id, and a bool representing the guess (is_a_over_b)
+            session: database session
+
+        Return:
+            Returns GuessResponse, data model containing if guess is correct, accumalative score so far,
+            if the session is still active (false if guess is wrong), player_b of current rounds stat read, and
+            the next game round (if guess is correct)
+        """
         cur_session = GameService.get_curr_session(req.session_token, session)
         cur_game = session.exec(
             select(Game)
             .where(Game.id == req.game_id)
         )
 
-        old_player_a_stat: PlayerStatRead = GameService.get_player_stat(cur_game, cur_session, session, 'a')
-        old_player_b_stat: PlayerStatRead = GameService.get_player_stat(cur_game, cur_session, session, 'b')
+        cur_player_a_stat: PlayerStatRead = GameService.get_player_stat(cur_game, cur_session, session, 'a')
+        cur_player_b_stat: PlayerStatRead = GameService.get_player_stat(cur_game, cur_session, session, 'b')
 
-        correct_guess = ((req.is_a_over_b and old_player_a_stat.stat_value >= old_player_b_stat.stat_value)
-            or (not req.is_a_over_b and old_player_a_stat.stat_value <= old_player_b_stat.stat_value))
+        correct_guess = ((req.is_a_over_b and cur_player_a_stat.stat_value >= cur_player_b_stat.stat_value)
+            or (not req.is_a_over_b and cur_player_a_stat.stat_value <= cur_player_b_stat.stat_value))
         
         if correct_guess: 
             # new_game_round is of Game, new_game_round_res is what is being responded to call
             new_game_round: Game = GameService.generate_new_game_round(req.session_token, session)
 
-            player_a_stat: PlayerStatRead = old_player_b_stat
+            player_a_stat: PlayerStatRead = cur_player_b_stat
             player_b_stat: PlayerStatRead = GameService.get_player_stat(cur_game, cur_session, session, 'b')
 
             new_game_round_res = NewGameResponse(
@@ -83,6 +109,18 @@ class GameService:
     
     @staticmethod
     def generate_new_game_round(session_token: str, session, prev_player: Player | None = None) -> Game:
+        """
+        Generates a new game round. Primarily uses helper functions to generate players,
+        and puts the generated players together into a new Game model.
+
+        Args:
+            session_token: string representing token of current session
+            session: database session
+            prev_player: previous player of the last round that carries over to this round. Nullable
+
+        Return:
+            Game model containing new game information
+        """
         cur_session = GameService.get_curr_session(session_token, session)
         
         # find seen players to filter out of new player list
