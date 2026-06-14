@@ -17,3 +17,7 @@ async def start_game(category: str, type: str, body: StartGameRequest, session: 
 @router.post("/guess", response_model=GuessResponse)
 async def game_guess(req: GuessRequest, session: Session = Depends(get_session)):
     return GameService.game_guess(req, session)
+
+@router.get("/{session_token}", response_model=GuessResponse)
+async def game_guess(session_token: str, session: Session = Depends(get_session)):
+    return GameService.get_game(session_token, session)

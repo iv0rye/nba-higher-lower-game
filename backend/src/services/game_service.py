@@ -14,6 +14,8 @@ class GameService:
     @staticmethod
     def start_game(cat: str, stat_type: str, body: StartGameRequest, session) -> NewGameResponse:
         """
+        TODO: rate limit start game
+
         Starts a game. Function inits a GameSession row, adds it, and then runs generate new game round to generate initial game round.
         Also runs get_player_stat to get the generated player stats in the response format.
 
@@ -154,6 +156,19 @@ class GameService:
             player_b=cur_player_b_stat,
             next_round=None
         )
+    
+
+    @staticmethod
+    def get_game(session_token: str, session):
+        """
+        Function that gets game session and all games under game session from token. If
+        game session is not over yet, raises error.
+        
+        Args:
+            session_token: token for a game session
+            session: database session
+        """
+        game_session = GameService.get_curr_session(session_token, session)
 
     
     @staticmethod
