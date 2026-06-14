@@ -5,7 +5,7 @@ from sqlmodel import Session, select
 from src.models.player import CAREER_STAT_CATEGORIES
 from src.models.player_season import SEASON_STAT_CATEGORIES
 from src.models import GameSession, Season, Game, Player, PlayerSeason
-from src.schemas import GuessRequest, PlayerStatRead, StartGameRequest, NewGameResponse
+from src.schemas import GuessRequest, GuessResponse, PlayerStatRead, StartGameRequest, NewGameResponse
 
 
 class GameService:
@@ -39,7 +39,7 @@ class GameService:
         
         new_game = GameService.generate_new_game_round(new_game_session.session_token, session)
     
-        player_a_stat = GameService.get_player_stat(new_game, new_game_session, session)
+        player_a_stat = GameService.get_player_stat(new_game, new_game_session, session, 'a')
         player_b_stat = GameService.get_player_stat(new_game, new_game_session, session, 'b')
 
         return NewGameResponse(
@@ -52,11 +52,37 @@ class GameService:
         )
     
     @staticmethod
-    def game_guess(req: GuessRequest, session) -> NewGameResponse:
+    def game_guess(req: GuessRequest, session) -> GuessResponse:
         cur_session = GameService.get_curr_session(req.session_token, session)
+        cur_game = session.exec(
+            select(Game)
+            .where(Game.id == req.game_id)
+        )
+
+        old_player_a_stat: PlayerStatRead = GameService.get_player_stat(cur_game, cur_session, session, 'a')
+        old_player_b_stat: PlayerStatRead = GameService.get_player_stat(cur_game, cur_session, session, 'b')
+
+        correct_guess = ((req.is_a_over_b and old_player_a_stat.stat_value >= old_player_b_stat.stat_value)
+            or (not req.is_a_over_b and old_player_a_stat.stat_value <= old_player_b_stat.stat_value))
+        
+        if correct_guess: 
+            # new_game_round is of Game, new_game_round_res is what is being responded to call
+            new_game_round: Game = GameService.generate_new_game_round(req.session_token, session)
+
+            player_a_stat: PlayerStatRead = old_player_b_stat
+            player_b_stat: PlayerStatRead = GameService.get_player_stat(cur_game, cur_session, session, 'b')
+
+            new_game_round_res = NewGameResponse(
+                session_token=cur_session.session_token,
+                game_id=new_game_round.id,
+                stat_category=cur_session.stat_category,
+                stat_type=cur_session.stat_type,
+                player_a=player_a_stat,
+                player_b=player_b_stat
+            )
     
     @staticmethod
-    def generate_new_game_round(session_token: str, session):
+    def generate_new_game_round(session_token: str, session, prev_player: Player | None = None) -> Game:
         cur_session = GameService.get_curr_session(session_token, session)
         
         # find seen players to filter out of new player list
@@ -74,22 +100,26 @@ class GameService:
             player_a, player_b = GameService.generate_players_career(
                 cur_session.stat_category, 
                 seen_players,
+                prev_player,
                 session
             )
 
         elif cur_session.stat_type.lower() == "season":
             # find player season of last round to bring to this round
             prev_player_season_b = None
+            prev_player_b = None
 
             if cur_session.rounds:
                 last_round = cur_session.rounds[-1]
                 prev_player_season_b = last_round.player_season_b
+                prev_player_b = last_round.player_b
 
             player_a, player_b, player_season_a, player_season_b = GameService.generate_players_season(
                 cur_session.stat_category, 
                 seen_players,
                 cur_session.seasons,
                 session,
+                prev_player_b,
                 prev_player_season_b
             )
 
@@ -114,7 +144,7 @@ class GameService:
 
 
     @staticmethod
-    def generate_players_career(cat: str, seen_players: list[int], session) -> tuple[Player, Player]: 
+    def generate_players_career(cat: str, seen_players: list[int], prev_player: Player | None, session) -> tuple[Player, Player]: 
         """
         helper function to generate random player[s] based on a career based game session
         """    
@@ -131,11 +161,11 @@ class GameService:
             .limit(100)
         ).all()
         
-        return GameService.select_players(available_players, seen_players, session)
+        return GameService.select_players(available_players, seen_players, prev_player, session)
         
 
     @staticmethod
-    def generate_players_season(cat: str, seen_players: list[int], seasons: list[Season], session, prev_player_season_b: PlayerSeason | None = None) -> tuple[Player, Player]:
+    def generate_players_season(cat: str, seen_players: list[int], seasons: list[Season], session, prev_player_b: Player | None = None, prev_player_season_b: PlayerSeason | None = None) -> tuple[Player, Player]:
         """
         helper function to generate random player[s] based on a season based game session
         """
@@ -156,7 +186,7 @@ class GameService:
             .limit(50)
         ).all()
 
-        player_a, player_b = GameService.select_players(available_players, seen_players, session)
+        player_a, player_b = GameService.select_players(available_players, seen_players, prev_player_b, session)
 
         if prev_player_season_b is not None:
             # carry over player_a's season from previous round's player_b
@@ -179,7 +209,7 @@ class GameService:
 
 
     @staticmethod
-    def select_players(available_players: list[Player], seen_players: list[int], session) -> tuple[Player, Player]:
+    def select_players(available_players: list[Player], seen_players: list[int], prev_player: Player, session) -> tuple[Player, Player]:
         """
         helper function to select random player[s] (depending on whether seen_players exist or not (implying if game is new or not))
         """
@@ -193,7 +223,11 @@ class GameService:
         if not available_players:
             raise HTTPException(status_code=409, detail="No more players available")
 
-        player_a = session.get(Player, seen_players[-1])
+        if not prev_player:
+            player_a = session.get(Player, seen_players[-1])
+        else:
+            player_a = prev_player
+
         player_b = random.choice(available_players)
 
         return (player_a, player_b)
@@ -237,7 +271,7 @@ class GameService:
     def get_curr_session(session_token: str, session) -> GameSession:
         """
         helper function to return current session from session token.
-        
+
         Raises 404 if session token not ofund
         """
         cur_session = session.exec(
