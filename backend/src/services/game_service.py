@@ -40,12 +40,14 @@ class GameService:
         new_game = GameService.generate_new_game_round(new_game_session.session_token, session)
     
         player_a_stat = GameService.get_player_stat(new_game, new_game_session, session)
+        player_b_stat = GameService.get_player_stat(new_game, new_game_session, session, 'b')
 
         return NewGameResponse(
             session_token=new_game_session.session_token,
             stat_category=new_game_session.stat_category,
             stat_type=new_game_session.stat_type,
             player_a=player_a_stat,
+            player_b=player_b_stat
         )
     
     @staticmethod
@@ -198,28 +200,36 @@ class GameService:
         return (player_a, player_b)
     
     @staticmethod
-    def get_player_stat(new_game: Game, cur_session: GameSession, session) -> PlayerStatRead:
+    def get_player_stat(new_game: Game, cur_session: GameSession, session, player: str = 'a') -> PlayerStatRead:
         """
         helper function to find a players relevant stats to return rather than
         returning every single stat and finding it in the front end
         """
-        player_a = session.get(Player, new_game.player_a_id)
+        player_id = getattr(new_game, f"player_{player}_id")
+        player_row = session.get(Player, player_id)
+
         team = None
+        season = None
 
         if cur_session.stat_type.lower() == "career":
             attr_name = f"career_{cur_session.stat_category}"
-            stat_value = getattr(player_a, attr_name)
+            stat_value = getattr(player_row, attr_name)
         else:  # "season"
-            player_season_a = session.get(PlayerSeason, new_game.player_season_a_id)
+            player_season_id = getattr(new_game, f"player_season_{player}_id")
+            player_season = session.get(PlayerSeason, player_season_id)
+
             attr_name = f"season_{cur_session.stat_category}"
-            stat_value = getattr(player_season_a, attr_name)
-            team = player_season_a.team
+            stat_value = getattr(player_season, attr_name)
+
+            team = player_season.team
+            season = player_season.season.label
 
         return PlayerStatRead(
-            id=player_a.id,
-            name=player_a.name,
-            photo_url=player_a.photo_url,
-            team=team if team is not None else None,
+            id=player_row.id,
+            name=player_row.name,
+            photo_url=player_row.photo_url,
+            team=team,
+            season=season,
             stat_category=cur_session.stat_category,
             stat_value=stat_value
         )
