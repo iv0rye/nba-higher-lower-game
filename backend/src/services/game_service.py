@@ -5,14 +5,14 @@ from sqlmodel import select
 from src.models.player import CAREER_STAT_CATEGORIES
 from src.models.player_season import SEASON_STAT_CATEGORIES
 from src.models import GameSession, Season, Game, Player, PlayerSeason
-from src.routers.games_requests import StartGameRequest
+from src.schemas import PlayerStatRead, StartGameRequest, NewGameResponse
 
 
 class GameService:
     CURRENT_SEASON = '2025-26'
 
     @staticmethod
-    def start_game(cat: str, stat_type: str, body: StartGameRequest, session):
+    def start_game(cat: str, stat_type: str, body: StartGameRequest, session) -> NewGameResponse:
         if not body.seasons or len(body.seasons) <= 0:
             game_seasons: list[Season] = session.exec(
                 select(Season)
@@ -39,9 +39,9 @@ class GameService:
         
         new_game = GameService.generate_new_game_round(new_game_session.session_token, session)
     
-        player_a_stat = GameService.get_player_a_stat(new_game, new_game_session, session)
+        player_a_stat = GameService.get_player_stat(new_game, new_game_session, session)
 
-        return StartGameResponse(
+        return NewGameResponse(
             session_token=new_game_session.session_token,
             stat_category=new_game_session.stat_category,
             stat_type=new_game_session.stat_type,
@@ -196,3 +196,30 @@ class GameService:
         player_b = random.choice(available_players)
 
         return (player_a, player_b)
+    
+    @staticmethod
+    def get_player_stat(new_game: Game, cur_session: GameSession, session) -> PlayerStatRead:
+        """
+        helper function to find a players relevant stats to return rather than
+        returning every single stat and finding it in the front end
+        """
+        player_a = session.get(Player, new_game.player_a_id)
+        team = None
+
+        if cur_session.stat_type.lower() == "career":
+            attr_name = f"career_{cur_session.stat_category}"
+            stat_value = getattr(player_a, attr_name)
+        else:  # "season"
+            player_season_a = session.get(PlayerSeason, new_game.player_season_a_id)
+            attr_name = f"season_{cur_session.stat_category}"
+            stat_value = getattr(player_season_a, attr_name)
+            team = player_season_a.team
+
+        return PlayerStatRead(
+            id=player_a.id,
+            name=player_a.name,
+            photo_url=player_a.photo_url,
+            team=team if team is not None else None,
+            stat_category=cur_session.stat_category,
+            stat_value=stat_value
+        )

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlmodel import SQLModel, Session
-from .games_requests import StartGameRequest
+from src.schemas import StartGameRequest
 from src.services.game_service import GameService
 from src.database import get_session
 

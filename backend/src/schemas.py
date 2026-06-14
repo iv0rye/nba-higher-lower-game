@@ -4,9 +4,10 @@ class StartGameRequest(SQLModel):
     seasons: list[str] | None = []
 
 
-class PlayerStatOut(SQLModel):
+class PlayerStatRead(SQLModel):
     id: int
     name: str
+    photo_url: str | None = None
     team: str | None = None
     stat_category: str
     stat_value: float | int
@@ -17,4 +18,4 @@ class NewGameResponse(SQLModel):
     session_token: str
     stat_category: str
     stat_type: str
-    player_a: PlayerStatOut
+    player_a: PlayerStatRead
