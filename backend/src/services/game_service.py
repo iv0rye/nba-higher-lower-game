@@ -2,11 +2,10 @@ import random
 
 from fastapi import HTTPException
 from sqlmodel import select
-from models import Player, PlayerSeason
-from models.player import CAREER_STAT_CATEGORIES
-from models.player_season import SEASON_STAT_CATEGORIES
-from src.models import GameSession, Season, Game
-from src.routers.games import StartGameRequest
+from src.models.player import CAREER_STAT_CATEGORIES
+from src.models.player_season import SEASON_STAT_CATEGORIES
+from src.models import GameSession, Season, Game, Player, PlayerSeason
+from src.routers.games_requests import StartGameRequest
 
 
 class GameService:

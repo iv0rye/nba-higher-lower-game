@@ -1,6 +1,6 @@
 from sqlmodel import Field, Relationship, SQLModel
 
-from models.game_season import GameSessionSeason
+from .game_season import GameSessionSeason
 
 class SeasonBase(SQLModel):
     label: str

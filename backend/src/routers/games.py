@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlmodel import SQLModel, Session
+from .games_requests import StartGameRequest
+from src.services.game_service import GameService
 from src.database import get_session
 
 router = APIRouter(
@@ -7,9 +9,7 @@ router = APIRouter(
     tags=["game"]
 )
 
-class StartGameRequest(SQLModel):
-    seasons: list[str] = []
 
-@router.post("/start/{category}/{type}")
+@router.post("/start/{type}/{category}")
 async def start_game(category: str, type: str, body: StartGameRequest, session: Session = Depends(get_session)):
-    return
+    return GameService.start_game(category, type, body, session)
