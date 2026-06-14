@@ -1,11 +1,11 @@
 import random
 
 from fastapi import HTTPException
-from sqlmodel import select
+from sqlmodel import Session, select
 from src.models.player import CAREER_STAT_CATEGORIES
 from src.models.player_season import SEASON_STAT_CATEGORIES
 from src.models import GameSession, Season, Game, Player, PlayerSeason
-from src.schemas import PlayerStatRead, StartGameRequest, NewGameResponse
+from src.schemas import GuessRequest, PlayerStatRead, StartGameRequest, NewGameResponse
 
 
 class GameService:
@@ -52,18 +52,12 @@ class GameService:
         )
     
     @staticmethod
-    def game_guess(token: str, is_a_over_b: bool, session) -> NewGameResponse:
-        pass
+    def game_guess(req: GuessRequest, session) -> NewGameResponse:
+        cur_session = GameService.get_curr_session(req.session_token, session)
     
     @staticmethod
     def generate_new_game_round(session_token: str, session):
-        cur_session = session.exec(
-            select(GameSession)
-            .where(GameSession.session_token == session_token)
-        ).one_or_none()
-
-        if not cur_session:
-            raise HTTPException(status_code=404, detail="Session token invalid")
+        cur_session = GameService.get_curr_session(session_token, session)
         
         # find seen players to filter out of new player list
         seen_players = []
@@ -238,3 +232,20 @@ class GameService:
             stat_category=cur_session.stat_category,
             stat_value=stat_value
         )
+    
+    @staticmethod
+    def get_curr_session(session_token: str, session) -> GameSession:
+        """
+        helper function to return current session from session token.
+        
+        Raises 404 if session token not ofund
+        """
+        cur_session = session.exec(
+            select(GameSession)
+            .where(GameSession.session_token == session_token)
+        ).one_or_none()
+
+        if not cur_session:
+            raise HTTPException(status_code=404, detail="Session token invalid")
+        
+        return cur_session
