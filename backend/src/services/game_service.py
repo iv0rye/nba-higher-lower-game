@@ -11,6 +11,11 @@ from src.schemas import GetGameRoundResponse, GetGameSessionResponse, GetSeasonR
 class GameService:
     CURRENT_SEASON = '2025-26'
 
+    STAT_CATEGORIES_BY_TYPE = {
+        "career": CAREER_STAT_CATEGORIES,
+        "season": SEASON_STAT_CATEGORIES,
+    }
+
     @staticmethod
     def start_game(cat: str, stat_type: str, body: StartGameRequest, session) -> NewGameResponse:
         """
@@ -28,6 +33,12 @@ class GameService:
         Return:
             returns the first game round of the new game session
         """
+        if stat_type not in GameService.STAT_CATEGORIES_BY_TYPE:
+            raise HTTPException(status_code=404, detail=f"Game stat type '{stat_type}' is invalid")
+        
+        if cat not in GameService.STAT_CATEGORIES_BY_TYPE[stat_type]:
+            raise HTTPException(status_code=404, detail=f"{stat_type} category type '{cat}' is invalid")
+        
         if not body.seasons or len(body.seasons) <= 0:
             game_seasons: list[Season] = session.exec(
                 select(Season)
