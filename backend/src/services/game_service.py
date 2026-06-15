@@ -5,7 +5,7 @@ from sqlmodel import Session, select
 from src.models.player import CAREER_STAT_CATEGORIES
 from src.models.player_season import SEASON_STAT_CATEGORIES
 from src.models import GameSession, Season, Game, Player, PlayerSeason
-from src.schemas import GetGameSessionResponse, GuessRequest, GuessResponse, PlayerStatRead, StartGameRequest, NewGameResponse
+from src.schemas import GetGameRoundResponse, GetGameSessionResponse, GetSeasonResponse, GuessRequest, GuessResponse, PlayerStatRead, StartGameRequest, NewGameResponse
 
 
 class GameService:
@@ -168,8 +168,52 @@ class GameService:
             session_token: token for a game session
             session: database session
         """
-        game_session = GameService.get_curr_session(session_token, session)
-        return game_session
+        cur_session = GameService.get_curr_session(session_token, session)
+
+        is_season = cur_session.stat_type.lower() == "season"
+
+        rounds = []
+        for game_round in cur_session.rounds:
+            player_a_stat = GameService.get_player_stat(game_round, cur_session, session, 'a')
+            player_b_stat = GameService.get_player_stat(game_round, cur_session, session, 'b')
+
+            rounds.append(GetGameRoundResponse(
+                id=game_round.id,
+                session_id=game_round.session_id,
+                player_a_id=game_round.player_a_id,
+                player_b_id=game_round.player_b_id,
+                player_season_a_id=game_round.player_season_a_id,
+                player_season_b_id=game_round.player_season_b_id,
+                guess_a_higher_b=game_round.guess_a_higher_b,
+                is_correct=game_round.is_correct,
+                player_a=player_a_stat,
+                player_b=player_b_stat,
+                player_season_a=player_a_stat if is_season else None,
+                player_season_b=player_b_stat if is_season else None,
+            ))
+        
+        seasons = []
+        for s in cur_session.seasons:
+            seasons.append(
+                GetSeasonResponse(
+                    id=s.id,
+                    label=s.label,
+                    year_start=s.year_start,
+                    year_end=s.year_end
+                )
+            )
+
+        return GetGameSessionResponse(
+            id=cur_session.id,
+            session_token=cur_session.session_token,
+            created_at=cur_session.created_at,
+            score=cur_session.score,
+            is_active=cur_session.is_active,
+            stat_category=cur_session.stat_category,
+            stat_type=cur_session.stat_type,
+            rounds=rounds,
+            seasons=seasons,
+        )
 
     
     @staticmethod
