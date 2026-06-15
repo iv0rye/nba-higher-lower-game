@@ -5,7 +5,7 @@ from sqlmodel import Session, select
 from src.models.player import CAREER_STAT_CATEGORIES
 from src.models.player_season import SEASON_STAT_CATEGORIES
 from src.models import GameSession, Season, Game, Player, PlayerSeason
-from src.schemas import GuessRequest, GuessResponse, PlayerStatRead, StartGameRequest, NewGameResponse
+from src.schemas import GetGameSessionResponse, GuessRequest, GuessResponse, PlayerStatRead, StartGameRequest, NewGameResponse
 
 
 class GameService:
@@ -169,6 +169,7 @@ class GameService:
             session: database session
         """
         game_session = GameService.get_curr_session(session_token, session)
+        return game_session
 
     
     @staticmethod

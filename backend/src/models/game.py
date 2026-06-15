@@ -15,6 +15,8 @@ class GameSessionBase(SQLModel):
 class GameBase(SQLModel):
     guess_a_higher_b: bool | None = None
     is_correct: bool | None = None
+    player_a_stat_value: float
+    player_b_stat_value: float
 
 # sql tables
 # TODO: add expiry system to clean database from old game sessions/games

@@ -1,9 +1,7 @@
 from datetime import datetime
-
 from sqlmodel import SQLModel
-
-from models.game import GameBase, GameSessionBase
-from models.season import SeasonBase
+from src.models.game import GameBase, GameSessionBase
+from src.models.season import SeasonBase
 
 class StartGameRequest(SQLModel):
     seasons: list[str] | None = []
@@ -52,8 +50,8 @@ class GetGameRoundResponse(GameBase):
     session_id: int
     player_a: PlayerStatRead
     player_b: PlayerStatRead
-    player_season_a: PlayerStatRead
-    player_season_b: PlayerStatRead
+    player_season_a: PlayerStatRead | None
+    player_season_b: PlayerStatRead | None
 
 
 class GetSeasonResponse(SeasonBase):
@@ -65,6 +63,6 @@ class GetGameSessionResponse(GameSessionBase):
     session_token: str
     created_at: datetime
 
-    rounds: list[GetGameRoundResponse]
+    rounds: list[GetGameRoundResponse] 
     seasons: list[GetSeasonResponse]
     
