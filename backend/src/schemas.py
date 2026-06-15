@@ -48,11 +48,16 @@ class GuessResponse(SQLModel):
 
 
 class GetGameRoundResponse(GameBase):
-    pass
+    id: int
+    session_id: int
+    player_a: PlayerStatRead
+    player_b: PlayerStatRead
+    player_season_a: PlayerStatRead
+    player_season_b: PlayerStatRead
 
 
 class GetSeasonResponse(SeasonBase):
-    pass
+    id: int
 
 
 class GetGameSessionResponse(GameSessionBase):
@@ -61,5 +66,5 @@ class GetGameSessionResponse(GameSessionBase):
     created_at: datetime
 
     rounds: list[GetGameRoundResponse]
-    seasons = list[GetSeasonResponse]
+    seasons: list[GetSeasonResponse]
     
