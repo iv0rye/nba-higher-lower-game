@@ -50,8 +50,6 @@ class GetGameRoundResponse(GameBase):
     session_id: int
     player_a: PlayerStatRead
     player_b: PlayerStatRead
-    player_season_a: PlayerStatRead | None
-    player_season_b: PlayerStatRead | None
 
 
 class GetSeasonResponse(SeasonBase):

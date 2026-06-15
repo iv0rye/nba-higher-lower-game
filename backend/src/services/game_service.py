@@ -170,8 +170,6 @@ class GameService:
         """
         cur_session = GameService.get_curr_session(session_token, session)
 
-        is_season = cur_session.stat_type.lower() == "season"
-
         rounds = []
         for game_round in cur_session.rounds:
             player_a_stat = GameService.get_player_stat(game_round, cur_session, session, 'a')
@@ -188,8 +186,6 @@ class GameService:
                 is_correct=game_round.is_correct,
                 player_a=player_a_stat,
                 player_b=player_b_stat,
-                player_season_a=player_a_stat if is_season else None,
-                player_season_b=player_b_stat if is_season else None,
             ))
         
         seasons = []
