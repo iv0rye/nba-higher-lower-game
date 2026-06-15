@@ -1,4 +1,8 @@
+from datetime import datetime
+
 from sqlmodel import SQLModel
+
+from models.game import GameSessionBase
 
 class StartGameRequest(SQLModel):
     seasons: list[str] | None = []
@@ -40,3 +44,21 @@ class GuessResponse(SQLModel):
     session_active: bool
     player_b: PlayerStatRead
     next_round: NewGameResponse | None = None
+
+
+class GetGameRoundResponse(GameBase):
+    pass
+
+
+class GetSeasonResponse(SeasonBase):
+    pass
+
+
+class GetGameSessionResponse(GameSessionBase):
+    id: int
+    session_token: str
+    created_at: datetime
+
+    rounds: list[GetGameRoundResponse]
+    seasons = list[GetSeasonResponse]
+    
