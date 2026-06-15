@@ -2,7 +2,8 @@ from datetime import datetime
 
 from sqlmodel import SQLModel
 
-from models.game import GameSessionBase
+from models.game import GameBase, GameSessionBase
+from models.season import SeasonBase
 
 class StartGameRequest(SQLModel):
     seasons: list[str] | None = []
