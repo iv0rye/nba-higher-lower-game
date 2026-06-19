@@ -4,8 +4,8 @@ import * as THREE from 'three'
 
 export default function Court() {
   const { scene } = useGLTF('/models/basketball_court.glb')
-  const texture = useTexture('/models/basketball_court.png')
-  
+  const texture = useTexture('/textures/basketball_court.png')
+
   texture.flipY = true
 
   useEffect(() => {
