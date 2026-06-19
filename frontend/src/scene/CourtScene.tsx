@@ -1,6 +1,7 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Stars } from '@react-three/drei'
 import Court from './Court'
+import Player from './Player'
 
 
 export default function CourtScene() {
@@ -9,6 +10,7 @@ export default function CourtScene() {
       camera={{ position: [0, 8, 14], fov: 55 }}
       style={{ position: 'absolute', top: 0, left: 0 }}
       gl={{ antialias: true, toneMappingExposure: 0.3 }}
+      shadows
     >
       {/* space environment */}
       <color attach="background" args={['#000008']} />
@@ -25,6 +27,7 @@ export default function CourtScene() {
       <ambientLight intensity={0.3} />
 
       <Court />
+      <Player />
 
       <OrbitControls />
     </Canvas>

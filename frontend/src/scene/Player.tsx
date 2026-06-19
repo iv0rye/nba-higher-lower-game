@@ -1,4 +1,5 @@
-import { useGLTF } from "@react-three/drei"
+import { useAnimations, useGLTF } from "@react-three/drei"
+import { useEffect } from "react"
 
 const ANIMATIONS = [
   'CharacterArmature|Idle',
@@ -22,10 +23,27 @@ export default function Player(
   position = [0, 0, 0],
   rotation = [0, 0, 0]
 } : PlayerProps) {
+  
+  const { scene, animations } = useGLTF('/models/character.glb')
+  const { actions } = useAnimations(animations, scene)
 
-  const { scene } = useGLTF('/models/character.glb')
+  useEffect(() => {
+    // stop all animations
+    Object.values(actions).forEach(action => action?.stop())
+    // play passed in animation
+    actions[animation]?.reset().fadeIn(0.3).play()
 
-  return(
-    <primitive object={scene} />
+    return () => {
+      actions[animation]?.fadeOut(0.3)
+    }
+  }, [animation, actions])
+
+  return (
+    <primitive 
+      object={scene} 
+      position={position}
+      rotation={rotation}
+      scale={0.004}
+    />
   )
 }
