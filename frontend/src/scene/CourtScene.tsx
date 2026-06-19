@@ -1,7 +1,8 @@
 import { Canvas } from '@react-three/fiber'
-import { useGLTF, OrbitControls, useTexture, Stars } from '@react-three/drei'
+import { useGLTF, OrbitControls, useTexture, Stars, Environment } from '@react-three/drei'
 import { useEffect } from 'react'
 import * as THREE from 'three'
+import { Bloom, EffectComposer, Scanline, Vignette } from '@react-three/postprocessing'
 
 function Court() {
   const { scene } = useGLTF('/models/basketball_court.glb')
@@ -37,25 +38,23 @@ export default function BackgroundScene() {
       {/* space environment */}
       <color attach="background" args={['#000008']} />
       <Stars
-        radius={200}
+        radius={30}
         depth={60}
-        count={8000}
+        count={4000}
         factor={4}
         fade
         speed={0.5}
       />
 
       {/* ambient lighting */}
-      <ambientLight intensity={0.1} />
-
-      {/* overhead court lights */}
-      <pointLight position={[0, 15, 0]} intensity={3} color="#ffffff" />
-
-      {/* rim glow lights on each side */}
-      <pointLight position={[-8, 4, 0]} intensity={2} color="#ff6b00" />
-      <pointLight position={[8, 4, 0]} intensity={2} color="#ff6b00" />
+      <ambientLight intensity={0.1} color="#aaaaaa" />
+      <Environment preset="night" />
 
       <Court />
+
+      <EffectComposer>
+        <Vignette darkness={0.7} /> 
+      </EffectComposer>
 
       <OrbitControls />
     </Canvas>
