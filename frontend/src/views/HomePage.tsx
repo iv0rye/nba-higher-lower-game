@@ -1,3 +1,9 @@
+import BackgroundScene from '../scene/CourtScene'
+
 export default function HomePage() {
-    return(<p>Home Page View</p>)
+  return (
+    <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+      <BackgroundScene />
+    </div>
+  )
 }
