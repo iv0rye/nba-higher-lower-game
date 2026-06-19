@@ -15,13 +15,15 @@ interface PlayerProps {
   animation?: AnimationName
   position?: [number, number, number]
   rotation?: [number, number, number]
+  scale?: number
 }
 
 export default function Player(
 { 
   animation = 'CharacterArmature|Idle',
   position = [0, 0, 0],
-  rotation = [0, 0, 0]
+  rotation = [0, 0, 0],
+  scale = 0.004
 } : PlayerProps) {
   
   const { scene, animations } = useGLTF('/models/character.glb')
@@ -43,7 +45,7 @@ export default function Player(
       object={scene} 
       position={position}
       rotation={rotation}
-      scale={0.004}
+      scale={scale}
     />
   )
 }
