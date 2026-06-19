@@ -1,9 +1,9 @@
-import BackgroundScene from '../scene/CourtScene'
+import CourtScene from '../scene/CourtScene'
 
 export default function HomePage() {
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
-      <BackgroundScene />
+      <CourtScene />
     </div>
   )
 }

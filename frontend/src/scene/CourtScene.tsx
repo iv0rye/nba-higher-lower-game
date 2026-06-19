@@ -3,6 +3,7 @@ import { useGLTF, OrbitControls, useTexture, Stars } from '@react-three/drei'
 import { useEffect } from 'react'
 import * as THREE from 'three'
 
+
 function Court() {
   const { scene } = useGLTF('/models/basketball_court.glb')
   const texture = useTexture('/models/basketball_court.png')
@@ -27,7 +28,7 @@ function Court() {
   return <primitive object={scene} scale={2} />
 }
 
-export default function BackgroundScene() {
+export default function CourtScene() {
   return (
     <Canvas
       camera={{ position: [0, 8, 14], fov: 55 }}
