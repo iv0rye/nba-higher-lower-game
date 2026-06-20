@@ -6,7 +6,8 @@ import { DEFAULT_BINDINGS, isActionActive } from "../config/keyBinds";
 
 const SPEED = 4
 const ACCELERATION = 20
-const FRICTION = 15
+const FRICTION = 20
+const ROTATION_SPEED = 10
 
 const LEVEL_BOUNDS = new THREE.Box2( 
   new THREE.Vector2(-7, -4),  // min x, z
@@ -20,6 +21,8 @@ export function usePlayerMovement(
 ) {
   const velocity = useRef(new THREE.Vector2(0, 0))
   const direction = new THREE.Vector2(0, 0)
+
+  const targetQuaternion = useRef(new THREE.Quaternion())
 
   useFrame((_, delta) => {
     if (!playerRef.current || !keysRef.current) return
@@ -48,6 +51,14 @@ export function usePlayerMovement(
 
       // clamp to max speed
       velocity.current.clampLength(0, SPEED)
+
+      // compute target quaternion from direction
+      const angle = Math.atan2(direction.x, direction.y)
+
+      targetQuaternion.current.setFromAxisAngle(
+        new THREE.Vector3(0, 1, 0), // rotate around Y axis
+        angle
+      )
     } else {
       // apply friction/decceleration
       velocity.current.x -= velocity.current.x * FRICTION * delta
@@ -65,8 +76,6 @@ export function usePlayerMovement(
       playerRef.current.position.z, LEVEL_BOUNDS.min.y, LEVEL_BOUNDS.max.y
     )
 
-    if (direction.x !== 0 || direction.y !== 0) {
-      playerRef.current.rotation.y = Math.atan2(direction.x, direction.y)
-    }
+    playerRef.current.quaternion.slerp(targetQuaternion.current, ROTATION_SPEED * delta)
   })
 }
