@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react"
 import { GAME_KEYS, type GameKey } from "../types/game"
 import { useFrame } from "@react-three/fiber"
+import { FRAME_PRIORITIES } from "../config/framePriorities"
 
 interface KeyState {
   pressed: boolean      // key is pressed in current frame
@@ -58,6 +59,19 @@ export function useKeys() {
       window.removeEventListener('keyup', onKeyUp)
     }
   }, [])
+	
+	// reset justPressed/justReleased for all keys
+  useFrame(() => {
+    let key: GameKey
+
+    for (key in keys.current) {
+      const state = keys.current[key]
+      if (state) {
+        state.justPressed = false
+        state.justReleased = false
+      }
+    }
+  }, FRAME_PRIORITIES.INPUT_FLUSH)
 
   return { keys }
 }
