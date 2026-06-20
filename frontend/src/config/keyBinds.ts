@@ -1,3 +1,4 @@
+// Adding keybinds: Add name to keybinds interface then default key into default_bindings
 export interface keyBinds {
     forward: string[]
     backward: string[]
