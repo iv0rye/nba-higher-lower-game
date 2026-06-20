@@ -5,8 +5,6 @@ import { useFrame } from "@react-three/fiber";
 import { DEFAULT_BINDINGS, isActionActive } from "../config/keyBinds";
 
 const SPEED = 4
-const ACCELERATION = 20
-const FRICTION = 20
 const ROTATION_SPEED = 10
 
 const LEVEL_BOUNDS = new THREE.Box2( 
@@ -20,7 +18,6 @@ interface Props {
 }
 
 export function usePlayerMovement({ playerRef, keysRef }: Props) {
-  const velocity = useRef(new THREE.Vector2(0, 0))
   const direction = new THREE.Vector2(0, 0)
 
   const targetQuaternion = useRef(new THREE.Quaternion())
@@ -46,26 +43,14 @@ export function usePlayerMovement({ playerRef, keysRef }: Props) {
 
     // if there was input
     if (direction.lengthSq() > 0) {
-      // accelerate in direction
-      velocity.current.x += direction.x * ACCELERATION * delta
-      velocity.current.y += direction.y * ACCELERATION * delta
-
-      // clamp to max speed
-      velocity.current.clampLength(0, SPEED)
+      playerRef.current.position.x += direction.x * SPEED * delta
+      playerRef.current.position.z += direction.y * SPEED * delta
 
       // compute target quaternion from direction
       const angle = Math.atan2(direction.x, direction.y)
 
       targetQuaternion.current.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle)
-    } else {
-      // apply friction/decceleration
-      velocity.current.x -= velocity.current.x * FRICTION * delta
-      velocity.current.y -= velocity.current.y * FRICTION * delta
-    }
-    // apply velocity
-    playerRef.current.position.x += velocity.current.x * delta
-    playerRef.current.position.z += velocity.current.y * delta
-
+    } 
     // clamp to bounds
     playerRef.current.position.x = THREE.MathUtils.clamp(
       playerRef.current.position.x, LEVEL_BOUNDS.min.x, LEVEL_BOUNDS.max.x
