@@ -6,5 +6,6 @@
  * cleanup (eg. flushing input) should be towards the end
  */
 export const FRAME_PRIORITIES = {
+	MOVEMENT: 1,
   INPUT_FLUSH: 100,     // cleanup - runs last: clears justPressed/justReleased for next frame
 } as const
