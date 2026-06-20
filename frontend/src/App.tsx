@@ -1,8 +1,7 @@
-import HomePage from './views/HomePage'
-
+import GameView from './views/GameView'
 
 export default function App() {
   return (
-    <HomePage />
+    <GameView />
   )
 }
