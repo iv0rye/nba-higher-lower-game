@@ -19,32 +19,32 @@ export function usePlayerMovement(
   keysRef: KeysRef
 ) {
   const velocity = useRef(new THREE.Vector2(0, 0))
-  const direction = useRef(new THREE.Vector2(0, 0))
+  const direction = new THREE.Vector2(0, 0)
 
   useFrame((_, delta) => {
     if (!playerRef.current || !keysRef.current) return
 
-    direction.current.set(0, 0)
+    direction.set(0, 0)
 
     if (isActionActive(keysRef.current, DEFAULT_BINDINGS.forward))  
-      direction.current.y -= 1
+      direction.y -= 1
     if (isActionActive(keysRef.current, DEFAULT_BINDINGS.backward)) 
-      direction.current.y += 1
+      direction.y += 1
     if (isActionActive(keysRef.current, DEFAULT_BINDINGS.left))     
-      direction.current.x -= 1
+      direction.x -= 1
     if (isActionActive(keysRef.current, DEFAULT_BINDINGS.right))    
-      direction.current.x += 1
+      direction.x += 1
 
     // normalising diagonals to get true direction vector
-    if (direction.current.lengthSq() > 1) 
-      direction.current.normalize()
+    if (direction.lengthSq() > 1) 
+      direction.normalize()
     
 
     // if there was input
-    if (direction.current.lengthSq() > 0) {
+    if (direction.lengthSq() > 0) {
       // accelerate in direction
-      velocity.current.x += direction.current.x * ACCELERATION * delta
-      velocity.current.y += direction.current.y * ACCELERATION * delta
+      velocity.current.x += direction.x * ACCELERATION * delta
+      velocity.current.y += direction.y * ACCELERATION * delta
 
       // clamp to max speed
       velocity.current.clampLength(0, SPEED)
@@ -65,8 +65,8 @@ export function usePlayerMovement(
       playerRef.current.position.z, LEVEL_BOUNDS.min.y, LEVEL_BOUNDS.max.y
     )
 
-    if (direction.current.x !== 0 || direction.current.y !== 0) {
-      playerRef.current.rotation.y = Math.atan2(direction.current.x, direction.current.y)
+    if (direction.x !== 0 || direction.y !== 0) {
+      playerRef.current.rotation.y = Math.atan2(direction.x, direction.y)
     }
   })
 }
