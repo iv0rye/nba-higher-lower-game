@@ -3,15 +3,14 @@ import * as THREE from 'three'
 import type { KeysRef } from "../types/game";
 import { useFrame } from "@react-three/fiber";
 import { DEFAULT_BINDINGS, isActionActive } from "../config/keyBinds";
-import { FRAME_PRIORITIES } from "../config/framePriorities";
 
-const SPEED = 5
+const SPEED = 3.5
 const LEVEL_BOUNDS = new THREE.Box2( 
   new THREE.Vector2(-8, -6),  // min x, z
   new THREE.Vector2(8, 6)     // max x, z
 )
 
-
+// TODOs: make rotation less static (lerp?), add acceleration + velocity
 export function usePlayerMovement(
   playerRef: RefObject<THREE.Group | null>,
   keysRef: KeysRef
@@ -40,7 +39,7 @@ export function usePlayerMovement(
       playerRef.current.position.x, LEVEL_BOUNDS.min.x, LEVEL_BOUNDS.max.x
     )
     playerRef.current.position.z = THREE.MathUtils.clamp(
-      playerRef.current.position.z, LEVEL_BOUNDS.min.y, LEVEL_BOUNDS.min.y // y vector in bound box is z vector in world axis
+      playerRef.current.position.z, LEVEL_BOUNDS.min.y, LEVEL_BOUNDS.max.y // y vector in bound box is z vector in world axis
     )
 
     if (moveX !== 0 || moveZ !== 0) {
