@@ -1,6 +1,7 @@
 import * as THREE from "three"
 import type { AnimationName } from "../types/game"
-import { useRef } from "react"
+import { useCallback, useRef } from "react"
+import { useFrame } from "@react-three/fiber"
 
 type AnimationConditions = {
   override: AnimationName | null
@@ -11,18 +12,18 @@ const FADE_DURATION = 0.2
 const MOVE_THRESHOLD = 0.001
 
 function playAnimation(
-  name: AnimationName,
+  nextAnimationName: AnimationName,
+	currentAnimationName: AnimationName,
   actions: Partial<Record<string, THREE.AnimationAction>>,
-  current: React.RefObject<AnimationName>
-) {
+): AnimationName {
 	// if animation is already playing, return
-  if (current.current === name) 
-		return
+  if (currentAnimationName === nextAnimationName) 
+		return currentAnimationName
 
-  actions[current.current]?.fadeOut(FADE_DURATION)
-  actions[name]?.reset().fadeIn(FADE_DURATION).play()
+  actions[currentAnimationName]?.fadeOut(FADE_DURATION)
+  actions[nextAnimationName]?.reset().fadeIn(FADE_DURATION).play()
 
-  current.current = name
+  return nextAnimationName
 }
 
 function selectAnimation(conditions: AnimationConditions): AnimationName {
@@ -45,6 +46,42 @@ interface Props {
 
 export function usePlayerAnimation({ actions, playerRef }: Props) {
 	const currentAnimation = useRef<AnimationName>('CharacterArmature|Idle')
-  const prevPosition = useRef(new THREE.Vector3())
   const animationOverride = useRef<AnimationName | null>(null)
+	const initialized = useRef(false)
+
+	// for movement check
+  const prevPosition = useRef(new THREE.Vector3())
+
+	// inline function to trigger new animation
+  const triggerAnimation = useCallback((name: AnimationName) => {
+    animationOverride.current = name
+  }, [])
+
+	// inline function to clear animation trigger
+  const clearOverride = useCallback(() => {
+    animationOverride.current = null
+  }, [])
+
+  useFrame(() => {
+    if (!playerRef.current) return
+
+    // initialize idle anim on first frame
+    if (!initialized.current && actions['CharacterArmature|Idle']) {
+      actions['CharacterArmature|Idle'].play()
+      initialized.current = true
+    }
+
+		// finding isMoving bool
+    const position = playerRef.current.position
+    const moving = (position.distanceTo(prevPosition.current) > MOVE_THRESHOLD)
+
+    const next = selectAnimation({ override: animationOverride.current, moving, })
+
+    currentAnimation.current = playAnimation(next, currentAnimation.current, actions)
+
+		// set previous position to current position for next frame
+    prevPosition.current.copy(position)
+  })
+
+  return { triggerAnimation, clearOverride }
 }
