@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react"
 import * as THREE from 'three'
 import { useKeysContext } from "../context/keysContext"
 import { usePlayerMovement } from "../hooks/usePlayerMovement"
+import { usePlayerAnimation } from "../hooks/usePlayerAnimation"
 
 const ANIMATIONS = [
   'CharacterArmature|Idle',
@@ -23,7 +24,6 @@ interface PlayerProps {
 
 export default function Player(
 { 
-  animation = 'CharacterArmature|Idle',
   position = [0, 0, 0],
   rotation = [0, 0, 0],
   scale = 0.004
@@ -35,17 +35,8 @@ export default function Player(
   const keysRef = useKeysContext()
 
   usePlayerMovement({playerRef, keysRef})
-
-  useEffect(() => {
-    // stop all animations
-    Object.values(actions).forEach(action => action?.stop())
-    // play passed in animation
-    actions[animation]?.reset().fadeIn(0.3).play()
-
-    return () => {
-      actions[animation]?.fadeOut(0.3)
-    }
-  }, [animation, actions])
+  // note: returns triggerAnimation and clearOverride which will be used for game logic
+  usePlayerAnimation({ actions, playerRef })
 
   return (
     <primitive 

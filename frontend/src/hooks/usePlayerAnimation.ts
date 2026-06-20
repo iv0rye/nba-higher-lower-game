@@ -14,7 +14,7 @@ const MOVE_THRESHOLD = 0.001
 function playAnimation(
   nextAnimationName: AnimationName,
 	currentAnimationName: AnimationName,
-  actions: Partial<Record<string, THREE.AnimationAction>>,
+  actions: Partial<Record<string, THREE.AnimationAction | null>>,
 ): AnimationName {
 	// if animation is already playing, return
   if (currentAnimationName === nextAnimationName) 
@@ -41,7 +41,7 @@ function selectAnimation(conditions: AnimationConditions): AnimationName {
 
 interface Props {
   playerRef: React.RefObject<THREE.Group | null>
-	actions: Partial<Record<string, THREE.AnimationAction>>
+	actions: Partial<Record<string, THREE.AnimationAction | null>>
 }
 
 export function usePlayerAnimation({ actions, playerRef }: Props) {
