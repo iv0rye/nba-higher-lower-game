@@ -14,11 +14,12 @@ const LEVEL_BOUNDS = new THREE.Box2(
   new THREE.Vector2(7, 4)     // max x, z
 )
 
-// TODOs: make rotation less static (lerp?), add acceleration + velocity
-export function usePlayerMovement(
-  playerRef: RefObject<THREE.Group | null>,
+interface Props {
+  playerRef: React.RefObject<THREE.Group | null>
   keysRef: KeysRef
-) {
+}
+
+export function usePlayerMovement({ playerRef, keysRef }: Props) {
   const velocity = useRef(new THREE.Vector2(0, 0))
   const direction = new THREE.Vector2(0, 0)
 
@@ -55,10 +56,7 @@ export function usePlayerMovement(
       // compute target quaternion from direction
       const angle = Math.atan2(direction.x, direction.y)
 
-      targetQuaternion.current.setFromAxisAngle(
-        new THREE.Vector3(0, 1, 0), // rotate around Y axis
-        angle
-      )
+      targetQuaternion.current.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle)
     } else {
       // apply friction/decceleration
       velocity.current.x -= velocity.current.x * FRICTION * delta

@@ -34,7 +34,7 @@ export default function Player(
 
   const keysRef = useKeysContext()
 
-  usePlayerMovement(playerRef, keysRef)
+  usePlayerMovement({playerRef, keysRef})
 
   useEffect(() => {
     // stop all animations
