@@ -6,8 +6,8 @@ import { DEFAULT_BINDINGS, isActionActive } from "../config/keyBinds";
 
 const SPEED = 3.5
 const LEVEL_BOUNDS = new THREE.Box2( 
-  new THREE.Vector2(-8, -6),  // min x, z
-  new THREE.Vector2(8, 6)     // max x, z
+  new THREE.Vector2(-7, -4),  // min x, z
+  new THREE.Vector2(7, 4)     // max x, z
 )
 
 // TODOs: make rotation less static (lerp?), add acceleration + velocity
@@ -31,7 +31,6 @@ export function usePlayerMovement(
       moveZ *= 0.707
     }
 
-    console.log(moveX, moveZ)
     playerRef.current.position.x += moveX * SPEED * delta
     playerRef.current.position.z += moveZ * SPEED * delta
 
