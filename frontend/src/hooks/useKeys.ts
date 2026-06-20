@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react"
 import { GAME_KEYS, type GameKey, type KeyState } from "../types/game"
-import { useFrame } from "@react-three/fiber"
-import { FRAME_PRIORITIES } from "../config/framePriorities"
 
 // NOTE: to add a new key to be used in the game, please add it in the game keys type
 const GAME_KEY_SET = new Set<string>(GAME_KEYS)
@@ -52,6 +50,6 @@ export function useKeys() {
       window.removeEventListener('keyup', onKeyUp)
     }
   }, [])
-	
+
   return { keys }
 }

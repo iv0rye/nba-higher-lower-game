@@ -3,7 +3,7 @@ import { useKeysContext } from '../context/keysContext'
 import { type GameKey } from '../types/game'
 import { FRAME_PRIORITIES } from '../config/framePriorities'
 
-export default function InputFlusher() {
+export default function FlushInput() {
   const keys = useKeysContext()
 
   useFrame(() => {

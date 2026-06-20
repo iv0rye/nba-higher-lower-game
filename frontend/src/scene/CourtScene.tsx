@@ -2,6 +2,7 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Stars } from '@react-three/drei'
 import Court from './Court'
 import Player from './Player'
+import FlushInput from './FlushInput'
 
 
 export default function CourtScene() {
@@ -26,9 +27,12 @@ export default function CourtScene() {
       {/* ambient lighting */}
       <ambientLight intensity={0.3} />
 
+      {/* models */}
       <Court />
       <Player />
 
+      {/* utility */}
+      <FlushInput />
       <OrbitControls />
     </Canvas>
   )
