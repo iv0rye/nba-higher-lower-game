@@ -1,5 +1,6 @@
 import * as THREE from "three"
 import type { AnimationName } from "../types/game"
+import { useRef } from "react"
 
 type AnimationConditions = {
   override: AnimationName | null
@@ -24,13 +25,6 @@ function playAnimation(
   current.current = name
 }
 
-function isMoving(playerRef: React.RefObject<THREE.Group | null>, prev: THREE.Vector3): boolean {
-  if (!playerRef.current) 
-		return false
-	
-  return playerRef.current.position.distanceTo(prev) > MOVE_THRESHOLD
-}
-
 function selectAnimation(conditions: AnimationConditions): AnimationName {
 	const { override, moving } = conditions
 
@@ -49,4 +43,8 @@ interface Props {
 	actions: Partial<Record<string, THREE.AnimationAction>>
 }
 
-export function usePlayerAnimation({ actions, playerRef }: Props) {}
+export function usePlayerAnimation({ actions, playerRef }: Props) {
+	const currentAnimation = useRef<AnimationName>('CharacterArmature|Idle')
+  const prevPosition = useRef(new THREE.Vector3())
+  const animationOverride = useRef<AnimationName | null>(null)
+}
