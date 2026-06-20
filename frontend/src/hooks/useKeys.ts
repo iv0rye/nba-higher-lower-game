@@ -53,18 +53,5 @@ export function useKeys() {
     }
   }, [])
 	
-	// reset justPressed/justReleased for all keys
-  useFrame(() => {
-    let key: GameKey
-
-    for (key in keys.current) {
-      const state = keys.current[key]
-      if (state) {
-        state.justPressed = false
-        state.justReleased = false
-      }
-    }
-  }, FRAME_PRIORITIES.INPUT_FLUSH)
-
   return { keys }
 }
