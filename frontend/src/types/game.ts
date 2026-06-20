@@ -1,5 +1,8 @@
 import type { RefObject } from "react"
 
+/**
+ * KeyBind Related
+ */
 export const GAME_KEYS = [
   'w', 'a', 's', 'd',
   'arrowup', 'arrowdown', 'arrowleft', 'arrowright'
@@ -15,3 +18,16 @@ export interface KeyState {
 }
 
 export type KeysRef = RefObject<Partial<Record<GameKey, KeyState>>>
+
+/**
+ * Animation Related
+ */
+export const ANIMATIONS = [
+  'CharacterArmature|Idle',
+  'CharacterArmature|Run',
+  'CharacterArmature|Victory',
+  'CharacterArmature|Death',
+  'CharacterArmature|Defeat',
+] as const
+
+export type AnimationName = typeof ANIMATIONS[number]

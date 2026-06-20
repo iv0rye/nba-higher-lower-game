@@ -1,4 +1,4 @@
-import { useRef, type RefObject } from "react";
+import { useRef } from "react";
 import * as THREE from 'three'
 import type { KeysRef } from "../types/game";
 import { useFrame } from "@react-three/fiber";
