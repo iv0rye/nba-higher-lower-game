@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Stars } from '@react-three/drei'
+import { Stars } from '@react-three/drei'
 import Court from './Court'
 import Player from './Player'
 import FlushInput from './FlushInput'
@@ -33,7 +33,6 @@ export default function CourtScene() {
 
       {/* utility */}
       <FlushInput />
-      <OrbitControls />
     </Canvas>
   )
 }

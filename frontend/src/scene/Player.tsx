@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { useKeysContext } from "../context/keysContext"
 import { usePlayerMovement } from "../hooks/usePlayerMovement"
 import { usePlayerAnimation } from "../hooks/usePlayerAnimation"
+import { useCameraMovement } from "../hooks/useCameraMovement"
 
 const ANIMATIONS = [
   'CharacterArmature|Idle',
@@ -37,6 +38,7 @@ export default function Player(
   usePlayerMovement({playerRef, keysRef})
   // note: returns triggerAnimation and clearOverride which will be used for game logic
   usePlayerAnimation({ actions, playerRef })
+  useCameraMovement({ playerRef })
 
   return (
     <primitive 
