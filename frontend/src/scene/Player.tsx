@@ -1,5 +1,8 @@
 import { useAnimations, useGLTF } from "@react-three/drei"
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
+import * as THREE from 'three'
+import { useKeysContext } from "../context/keysContext"
+import { usePlayerMovement } from "../hooks/usePlayerMovement"
 
 const ANIMATIONS = [
   'CharacterArmature|Idle',
@@ -25,9 +28,13 @@ export default function Player(
   rotation = [0, 0, 0],
   scale = 0.004
 } : PlayerProps) {
-  
+  const playerRef = useRef<THREE.Group>(null)
   const { scene, animations } = useGLTF('/models/character.glb')
   const { actions } = useAnimations(animations, scene)
+
+  const keysRef = useKeysContext()
+
+  usePlayerMovement(playerRef, keysRef)
 
   useEffect(() => {
     // stop all animations
@@ -42,6 +49,7 @@ export default function Player(
 
   return (
     <primitive 
+      ref={playerRef}
       object={scene} 
       position={position}
       rotation={rotation}

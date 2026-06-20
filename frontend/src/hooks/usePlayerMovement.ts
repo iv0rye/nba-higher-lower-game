@@ -13,7 +13,7 @@ const LEVEL_BOUNDS = new THREE.Box2(
 
 
 export function usePlayerMovement(
-  playerRef: RefObject<THREE.Group>,
+  playerRef: RefObject<THREE.Group | null>,
   keysRef: KeysRef
 ) {
   useFrame((_, delta) => {
@@ -32,6 +32,7 @@ export function usePlayerMovement(
       moveZ *= 0.707
     }
 
+    console.log(moveX, moveZ)
     playerRef.current.position.x += moveX * SPEED * delta
     playerRef.current.position.z += moveZ * SPEED * delta
 
@@ -45,5 +46,5 @@ export function usePlayerMovement(
     if (moveX !== 0 || moveZ !== 0) {
       playerRef.current.rotation.y = Math.atan2(moveX, moveZ)
     }
-  }, FRAME_PRIORITIES.MOVEMENT)
+  })
 }

@@ -50,6 +50,6 @@ export function useKeys() {
       window.removeEventListener('keyup', onKeyUp)
     }
   }, [])
-
+	
   return { keys }
 }
