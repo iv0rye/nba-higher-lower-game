@@ -1,5 +1,5 @@
 import { useAnimations, useGLTF } from "@react-three/drei"
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import * as THREE from 'three'
 import { useKeysContext } from "../context/keysContext"
 import { usePlayerMovement } from "../hooks/usePlayerMovement"
