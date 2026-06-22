@@ -9,8 +9,22 @@
   border-width: 20px;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   pointer-events: none;
+
+	padding-top: 13px;
+}
+
+.headshot {
+	width: 70px;
+  height: 70px;
+
+  background-image: url(/ui/panel_glass_screws.png);
+  background-size: 100% 100%;
+
+	object-fit: cover;
+	padding: 2px;
+	border-radius: 7px;
 }
