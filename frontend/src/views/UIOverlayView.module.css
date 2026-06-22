@@ -13,7 +13,8 @@
 
 .top {
   display: flex;
-  justify-content: center; 
+  flex-direction: row;
+  justify-content: space-around; 
   align-items: flex-start;
   padding: 20px;
 }
