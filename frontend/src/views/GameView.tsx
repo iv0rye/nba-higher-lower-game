@@ -1,6 +1,7 @@
 import { KeysContext } from '../context/keysContext'
 import { useKeys } from '../hooks/useKeys'
 import CourtScene from '../scene/CourtScene'
+import UIOverlayView from './UIOverlayView'
 
 export default function GameView() {
   const { keys } = useKeys()
@@ -10,6 +11,7 @@ export default function GameView() {
 
     <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
       <CourtScene />
+      <UIOverlayView />
     </div>
 
     </KeysContext.Provider>
