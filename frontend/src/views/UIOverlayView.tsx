@@ -8,6 +8,7 @@ export default function UIOverlayView() {
       <div className={styles.top}>
         <PlayerCardWidget />
         <ScoreWidget score={0}/>
+        <PlayerCardWidget />
       </div>
     </div>
   )
