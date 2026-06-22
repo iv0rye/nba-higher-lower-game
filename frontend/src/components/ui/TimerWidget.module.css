@@ -1,0 +1,28 @@
+.panel {
+  border-style: solid;
+  border-image: url(/ui/panel_glass_screws.png);
+  border-image-slice: 40 40 40 40 fill;
+  border-image-repeat: stretch;
+  border-width: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  gap: 0.5vh;
+}
+
+.question {
+  color: #1a1a2e;
+  font-size: 1.0vw;
+  text-align: center;
+}
+
+.timer {
+  color: #1a1a2e;
+  font-size: 2vw;
+  font-weight: bold;
+  
+  padding-top: 10px;
+}
