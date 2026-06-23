@@ -2,6 +2,7 @@ import { KeysContext } from '../context/keysContext'
 import { useKeys } from '../hooks/useKeys'
 import CourtScene from '../scene/CourtScene'
 import { useGameStateStore } from '../stores/useGameStateStore'
+import LoadingScreenView from './LoadingScreenView'
 import MenuView from './MenuView'
 import UIOverlayView from './UIOverlayView'
 
@@ -14,7 +15,7 @@ export default function GameView() {
 
     <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
       <CourtScene />
-
+      <LoadingScreenView />
       {gameState === 'menu' && <MenuView />}
       {gameState === 'playing' && <UIOverlayView />}
     </div>
