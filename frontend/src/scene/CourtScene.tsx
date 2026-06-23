@@ -3,6 +3,7 @@ import { Stars } from '@react-three/drei'
 import Court from './Court'
 import Player from './Player'
 import FlushInput from './FlushInput'
+import { Suspense } from 'react'
 
 
 export default function CourtScene() {
@@ -13,26 +14,28 @@ export default function CourtScene() {
       gl={{ antialias: true, toneMappingExposure: 0.3 }}
       shadows
     >
-      {/* space environment */}
-      <color attach="background" args={['#000008']} />
-      <Stars
-        radius={30}
-        depth={60}
-        count={4000}
-        factor={4}
-        fade
-        speed={0.5}
-      />
+      <Suspense fallback={null}>
+        {/* space environment */}
+        <color attach="background" args={['#000008']} />
+        <Stars
+          radius={30}
+          depth={60}
+          count={4000}
+          factor={4}
+          fade
+          speed={0.5}
+        />
 
-      {/* ambient lighting */}
-      <ambientLight intensity={0.3} />
+        {/* ambient lighting */}
+        <ambientLight intensity={0.3} />
 
-      {/* models */}
-      <Court />
-      <Player />
+        {/* models */}
+        <Court />
+        <Player />
 
-      {/* utility */}
-      <FlushInput />
+        {/* utility */}
+        <FlushInput />
+      </Suspense>
     </Canvas>
   )
 }
