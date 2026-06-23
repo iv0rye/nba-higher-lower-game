@@ -1,10 +1,12 @@
 import { KeysContext } from '../context/keysContext'
 import { useKeys } from '../hooks/useKeys'
 import CourtScene from '../scene/CourtScene'
+import { useGameStateStore } from '../stores/useGameStateStore'
 import UIOverlayView from './UIOverlayView'
 
 export default function GameView() {
   const { keys } = useKeys()
+  const gameState = useGameStateStore((state) => state.gameState)
 
   return (
     <KeysContext.Provider value={keys}>
