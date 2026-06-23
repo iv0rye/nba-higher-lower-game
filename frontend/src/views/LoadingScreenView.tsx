@@ -47,7 +47,3 @@ export default function LoadingScreenView({ onLoaded }: LoadingScreenProps) {
     </div>
   )
 }
-
-function setMinTimePassed(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}
