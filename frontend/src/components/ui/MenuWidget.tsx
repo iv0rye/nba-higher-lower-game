@@ -6,7 +6,7 @@ export default function MenuWidget() {
 
   return (
     <div className={styles.panel}>
-      <img src="/ui/logo.png" alt="Logo" />
+      <img src="/ui/logo.png" alt="Logo" className={styles.logo}/>
 
       <button 
         className={styles.button}

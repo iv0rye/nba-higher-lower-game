@@ -1,5 +1,5 @@
 .panel {
-  height: 50vh;
+  height: 60vh;
 	aspect-ratio: 2 / 3;
 
   border-style: solid;
@@ -17,8 +17,12 @@
 	padding: 13px;
 }
 
+.logo {
+	max-height: 15vh;
+}
+
 .button {
-  width: 80%;
+  height: 10vh;
   aspect-ratio: 3;
 
   border-style: solid;
