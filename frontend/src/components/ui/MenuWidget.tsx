@@ -16,12 +16,10 @@ export default function MenuWidget() {
 
       <MenuButtonWidget 
         text="How To Play"
-        clickEvent={() => setGameState('playing')}
       />
 
       <MenuButtonWidget 
         text="Search"
-        clickEvent={() => setGameState('playing')}
       />
 
       <div className={styles.credit}>
