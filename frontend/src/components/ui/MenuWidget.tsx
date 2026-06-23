@@ -27,6 +27,9 @@ export default function MenuWidget() {
         Search Game
       </button>
 
+      <div className={styles.credit}>
+        created by <a href="https://github.com/iv0rye" target="_blank" className={styles.credit}>iv0rye</a> :)
+      </div>
     </div>
   )
 }

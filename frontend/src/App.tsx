@@ -18,8 +18,8 @@ export default function App() {
     <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
       <GameView />
       {!loaded && <LoadingScreenView onLoaded={() => setLoaded(true)}/>}
-      {gameState === 'menu' && <MenuView />}
-      {gameState === 'playing' && <UIOverlayView />}
+      {loaded && gameState === 'menu' && <MenuView />}
+      {loaded && gameState === 'playing' && <UIOverlayView />}
     </div>
 
     </KeysContext.Provider>

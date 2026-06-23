@@ -45,3 +45,7 @@
   border-width: 20px;
 	transform: translateY(3px);
 }
+
+.credit {
+	color: inherit;
+}
