@@ -31,3 +31,8 @@ export const ANIMATIONS = [
 ] as const
 
 export type AnimationName = typeof ANIMATIONS[number]
+
+/**
+ * Game loop related
+ */
+export type GameState = 'menu' | 'playing' | 'gameover'
