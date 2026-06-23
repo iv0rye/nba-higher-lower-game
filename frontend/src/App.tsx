@@ -6,6 +6,7 @@ import { KeysContext } from './context/keysContext'
 import LoadingScreenView from './views/LoadingScreenView'
 import UIOverlayView from './views/UIOverlayView'
 import MenuView from './views/MenuView'
+import { Route, Routes } from 'react-router-dom'
 
 export default function App() {
   const { keys } = useKeys()
@@ -14,13 +15,24 @@ export default function App() {
 
   return (
     <KeysContext.Provider value={keys}>
-
-    <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
-      <GameView />
+      
       {!loaded && <LoadingScreenView onLoaded={() => setLoaded(true)}/>}
-      {loaded && gameState === 'menu' && <MenuView />}
-      {loaded && gameState === 'playing' && <UIOverlayView />}
-    </div>
+
+      <Routes>
+        <Route path="/" element={
+          <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+            <GameView />
+            {loaded && gameState === 'menu' && <MenuView />}
+            {loaded && gameState === 'playing' && <UIOverlayView />}
+          </div>
+        } />
+
+        <Route path="/tutorial" element={
+          <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+            temporary
+          </div>
+        } />
+      </Routes>
 
     </KeysContext.Provider>
   )
