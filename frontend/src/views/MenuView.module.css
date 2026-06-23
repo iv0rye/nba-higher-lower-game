@@ -9,7 +9,4 @@
   display: flex;
   justify-content: center;  
   align-items: center;
-
-  backdrop-filter: blur(5px); 
-  -webkit-backdrop-filter: blur(5px);
 }

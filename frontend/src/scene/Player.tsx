@@ -31,7 +31,7 @@ export default function Player(
   usePlayerMovement({ playerRef, keysRef, enabled: gameState === 'playing' })
   // note: returns triggerAnimation and clearOverride which will be used for game logic
   usePlayerAnimation({ actions, playerRef })
-  useCameraMovement({ playerRef })
+  useCameraMovement({ playerRef, isPlaying: gameState === 'playing' })
 
   return (
     <primitive 

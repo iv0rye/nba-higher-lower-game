@@ -1,4 +1,3 @@
-import MenuWidget from "../components/ui/MenuWidget";
 import PlayerCardWidget from "../components/ui/PlayerCardWidget";
 import ScoreWidget from "../components/ui/ScoreWidget";
 import TimerWidget from "../components/ui/TimerWidget";

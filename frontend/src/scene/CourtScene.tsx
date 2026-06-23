@@ -8,7 +8,7 @@ import FlushInput from './FlushInput'
 export default function CourtScene() {
   return (
     <Canvas
-      camera={{ position: [0, 8, 14], fov: 55 }}
+      camera={{ position: [0, 14, 12], fov: 60 }}
       style={{ position: 'absolute', top: 0, left: 0 }}
       gl={{ antialias: true, toneMappingExposure: 0.3 }}
       shadows
