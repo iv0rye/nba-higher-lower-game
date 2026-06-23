@@ -1,6 +1,6 @@
 .panel {
-  height: 20vh;
-	aspect-ratio: 2;
+  height: 50vh;
+	aspect-ratio: 2 / 3;
 
   border-style: solid;
   border-image: url(/ui/panel_menu.png);
