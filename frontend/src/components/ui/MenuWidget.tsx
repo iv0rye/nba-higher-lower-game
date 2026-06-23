@@ -6,7 +6,27 @@ export default function MenuWidget() {
 
   return (
     <div className={styles.panel}>
-      <button onClick={() => setGameState('playing')}>Start Game</button>
+      <img src="/ui/logo.png" alt="Logo" />
+
+      <button 
+        className={styles.button}
+        onClick={() => setGameState('playing')}
+      >
+        Start Game
+      </button>
+
+      <button 
+        className={styles.button}
+      >
+        How To Play
+      </button>
+
+      <button 
+        className={styles.button}
+      >
+        Search Game
+      </button>
+
     </div>
   )
 }

@@ -10,9 +10,38 @@
 
   display: flex;
 	gap: 1vw;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 
-	padding-top: 13px;
+	padding: 13px;
+}
+
+.button {
+  width: 80%;
+  aspect-ratio: 3;
+
+  border-style: solid;
+  border-image: url(/ui/button_unpressed.png);
+  border-image-slice: 40 40 40 40 fill;
+  border-image-repeat: stretch;
+  border-width: 20px;
+
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a2e;
+  font-size: 1.5vh;
+  font-weight: bold;
+  pointer-events: all;
+}
+
+.button:hover, .button:active {
+  border-style: solid;
+  border-image: url(/ui/button_pressed.png);
+  border-image-slice: 40 40 40 40 fill;
+  border-image-repeat: stretch;
+  border-width: 20px;
+	transform: translateY(3px);
 }
