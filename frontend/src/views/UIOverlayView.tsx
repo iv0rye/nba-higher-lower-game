@@ -12,7 +12,6 @@ export default function UIOverlayView() {
         <ScoreWidget score={0}/>
         <PlayerCardWidget name={"Bronny James"} headshotURL={"https://cdn.nba.com/headshots/nba/latest/1040x760/2544.png"} statLabel={"PPG"} />
       </div>
-      <MenuWidget />
       <div className={styles.bottom}>
         <TimerWidget playerAName={"Lebron James"} playerBName={"Bronny James"} />
       </div>

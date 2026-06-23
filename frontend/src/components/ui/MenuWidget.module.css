@@ -13,7 +13,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  pointer-events: none;
 
 	padding-top: 13px;
 }
