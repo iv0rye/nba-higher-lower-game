@@ -5,19 +5,9 @@ import { useKeysContext } from "../context/keysContext"
 import { usePlayerMovement } from "../hooks/usePlayerMovement"
 import { usePlayerAnimation } from "../hooks/usePlayerAnimation"
 import { useCameraMovement } from "../hooks/useCameraMovement"
-
-const ANIMATIONS = [
-  'CharacterArmature|Idle',
-  'CharacterArmature|Run',
-  'CharacterArmature|Victory',
-  'CharacterArmature|Death',
-  'CharacterArmature|Defeat',
-] as const
-
-type AnimationName = typeof ANIMATIONS[number]
+import { useGameStateStore } from "../stores/useGameStateStore"
 
 interface PlayerProps {
-  animation?: AnimationName
   position?: [number, number, number]
   rotation?: [number, number, number]
   scale?: number
@@ -32,10 +22,13 @@ export default function Player(
   const playerRef = useRef<THREE.Group>(null)
   const { scene, animations } = useGLTF('/models/character.glb')
   const { actions } = useAnimations(animations, scene)
+  const gameState = useGameStateStore((state) => state.gameState)
 
   const keysRef = useKeysContext()
 
-  usePlayerMovement({playerRef, keysRef})
+  
+
+  usePlayerMovement({ playerRef, keysRef, enabled: gameState === 'playing' })
   // note: returns triggerAnimation and clearOverride which will be used for game logic
   usePlayerAnimation({ actions, playerRef })
   useCameraMovement({ playerRef })

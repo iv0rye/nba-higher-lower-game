@@ -15,15 +15,16 @@ const LEVEL_BOUNDS = new THREE.Box2(
 interface Props {
   playerRef: React.RefObject<THREE.Group | null>
   keysRef: KeysRef
+  enabled?: boolean
 }
 
-export function usePlayerMovement({ playerRef, keysRef }: Props) {
+export function usePlayerMovement({ playerRef, keysRef, enabled=true }: Props) {
   const direction = new THREE.Vector2(0, 0)
 
   const targetQuaternion = useRef(new THREE.Quaternion())
 
   useFrame((_, delta) => {
-    if (!playerRef.current || !keysRef.current) return
+    if (!playerRef.current || !keysRef.current || !enabled) return
 
     direction.set(0, 0)
 
