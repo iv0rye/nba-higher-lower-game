@@ -1,5 +1,5 @@
 import { useFrame, useThree } from '@react-three/fiber'
-import { useRef, type RefObject } from 'react'
+import { useEffect, useRef, type RefObject } from 'react'
 import * as THREE from 'three'
 
 // note: camera offset is effectively distance from origin (player)
@@ -22,13 +22,31 @@ export function useCameraMovement({ playerRef, isPlaying=true }: Props) {
   const { camera } = useThree()
   const atPlayPosition = useRef(false)
   const lookAtTarget = useRef(INTRO_TARGET.clone())
+  const mouseOffset = useRef(new THREE.Vector2(0, 0))
+
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      // normalize -> -1 to 1
+      mouseOffset.current.x = (e.clientX / window.innerWidth - 0.5) * 2
+      mouseOffset.current.y = (e.clientY / window.innerHeight - 0.5) * 2
+    }
+    window.addEventListener('mousemove', onMouseMove)
+    return () => window.removeEventListener('mousemove', onMouseMove)
+  }, [])
 
   useFrame(() => {
     if (!isPlaying) {
       atPlayPosition.current = false
       lookAtTarget.current.copy(INTRO_TARGET)
 
-      camera.lookAt(lookAtTarget.current)
+      const mx = mouseOffset.current.x   
+      const mz = mouseOffset.current.y  
+
+      camera.lookAt(
+        lookAtTarget.current.x + mx * (1/2),
+        lookAtTarget.current.y,
+        lookAtTarget.current.z - mz * 2
+      )
       return
     }
 
