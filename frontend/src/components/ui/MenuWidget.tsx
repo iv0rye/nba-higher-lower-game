@@ -1,4 +1,5 @@
 import { useGameStateStore } from "../../stores/useGameStateStore"
+import MenuButtonWidget from "./MenuButtonWidget"
 import styles from "./MenuWidget.module.css"
 
 export default function MenuWidget() {
@@ -8,24 +9,20 @@ export default function MenuWidget() {
     <div className={styles.panel}>
       <img src="/ui/logo.png" alt="Logo" className={styles.logo}/>
 
-      <button 
-        className={styles.button}
-        onClick={() => setGameState('playing')}
-      >
-        Start Game
-      </button>
+      <MenuButtonWidget 
+        text="Start Game"
+        clickEvent={() => setGameState('playing')}
+      />
 
-      <button 
-        className={styles.button}
-      >
-        How To Play
-      </button>
+      <MenuButtonWidget 
+        text="How To Play"
+        clickEvent={() => setGameState('playing')}
+      />
 
-      <button 
-        className={styles.button}
-      >
-        Search Game
-      </button>
+      <MenuButtonWidget 
+        text="Search"
+        clickEvent={() => setGameState('playing')}
+      />
 
       <div className={styles.credit}>
         created by <a href="https://github.com/iv0rye" target="_blank" className={styles.credit}>iv0rye</a> :)

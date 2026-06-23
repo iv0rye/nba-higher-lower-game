@@ -1,0 +1,28 @@
+.button {
+  height: 10vh;
+  aspect-ratio: 3;
+
+  border-style: solid;
+  border-image: url(/ui/button_unpressed.png);
+  border-image-slice: 40 40 40 40 fill;
+  border-image-repeat: stretch;
+  border-width: 20px;
+
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a2e;
+  font-size: 1.5vh;
+  font-weight: bold;
+  pointer-events: all;
+}
+
+.button:hover, .button:active {
+  border-style: solid;
+  border-image: url(/ui/button_pressed.png);
+  border-image-slice: 40 40 40 40 fill;
+  border-image-repeat: stretch;
+  border-width: 20px;
+	transform: translateY(3px);
+}
