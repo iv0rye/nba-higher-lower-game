@@ -1,0 +1,19 @@
+.panel {
+  height: 20vh;
+	aspect-ratio: 2;
+
+  border-style: solid;
+  border-image: url(/ui/panel_menu.png);
+  border-image-slice: 40 40 40 40 fill;
+  border-image-repeat: stretch;
+  border-width: 20px;
+
+  display: flex;
+	gap: 1vw;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+
+	padding-top: 13px;
+}
