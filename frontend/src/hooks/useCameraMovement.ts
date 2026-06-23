@@ -43,7 +43,7 @@ export function useCameraMovement({ playerRef, isPlaying=true }: Props) {
       const mz = mouseOffset.current.y  
 
       camera.lookAt(
-        lookAtTarget.current.x + mx * (1/2),
+        lookAtTarget.current.x + mx * (1/2), // multiplied by strength of lookat
         lookAtTarget.current.y,
         lookAtTarget.current.z - mz * 2
       )
