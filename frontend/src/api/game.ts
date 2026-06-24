@@ -1,12 +1,10 @@
-import type { GuessRequest, GuessResponse, NewGameResponse } from "../types/api"
+import type { GuessRequest, GuessResponse, NewGameResponse, StartGameRequest } from "../types/api"
 
 const BACKEND_URL = 'http://localhost:8000'
 
-export async function startGame(
-  type: string,
-  category: string,
-  seasons: string[] = []
-): Promise<NewGameResponse> {
+export async function startGame(req: StartGameRequest): Promise<NewGameResponse> {
+  const { type, category, seasons = [] } = req
+
   const res = await fetch(`${BACKEND_URL}/game/start/${type}/${category}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

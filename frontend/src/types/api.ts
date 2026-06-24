@@ -29,7 +29,9 @@ export interface GuessResponse {
 }
 
 export interface StartGameRequest {
-  seasons: string[]
+  type: string
+	category: string
+  seasons?: string[]
 }
 
 export interface GuessRequest {
