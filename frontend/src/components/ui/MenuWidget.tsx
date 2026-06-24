@@ -1,9 +1,9 @@
-import { useGameStateStore } from "../../stores/useGameStateStore"
+import { useGameStore } from "../../stores/useGameStore"
 import MenuButtonWidget from "./MenuButtonWidget"
 import styles from "./MenuWidget.module.css"
 
 export default function MenuWidget() {
-  const setGameState = useGameStateStore((state) => state.setGameState)
+  const setGameState = useGameStore((state) => state.setGameState)
 
   return (
     <div className={styles.panel}>

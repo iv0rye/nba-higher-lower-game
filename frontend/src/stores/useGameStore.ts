@@ -6,7 +6,7 @@ interface GameStore {
 	setGameState: (state: GameState) => void
 }
 
-export const useGameStateStore = create<GameStore>((set) => ({
+export const useGameStore = create<GameStore>((set) => ({
 	gameState: 'menu',
 	setGameState: (gameState) => set({ gameState })
 }))

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useKeys } from './hooks/useKeys'
-import { useGameStateStore } from './stores/useGameStateStore'
+import { useGameStore } from './stores/useGameStore'
 import GameView from './views/GameView'
 import { KeysContext } from './context/keysContext'
 import LoadingScreenView from './views/LoadingScreenView'
@@ -10,7 +10,7 @@ import { Route, Routes } from 'react-router-dom'
 
 export default function App() {
   const { keys } = useKeys()
-  const gameState = useGameStateStore((state) => state.gameState)
+  const gameState = useGameStore((state) => state.gameState)
   const [loaded, setLoaded] = useState(false)
 
   return (

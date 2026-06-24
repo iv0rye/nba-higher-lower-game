@@ -5,7 +5,7 @@ import { useKeysContext } from "../context/keysContext"
 import { usePlayerMovement } from "../hooks/usePlayerMovement"
 import { usePlayerAnimation } from "../hooks/usePlayerAnimation"
 import { useCameraMovement } from "../hooks/useCameraMovement"
-import { useGameStateStore } from "../stores/useGameStateStore"
+import { useGameStore } from "../stores/useGameStore"
 
 interface PlayerProps {
   position?: [number, number, number]
@@ -22,7 +22,7 @@ export default function Player(
   const playerRef = useRef<THREE.Group>(null)
   const { scene, animations } = useGLTF('/models/character.glb')
   const { actions } = useAnimations(animations, scene)
-  const gameState = useGameStateStore((state) => state.gameState)
+  const gameState = useGameStore((state) => state.gameState)
 
   const keysRef = useKeysContext()
 

@@ -34,5 +34,7 @@ export type AnimationName = typeof ANIMATIONS[number]
 
 /**
  * Game loop related
+ * Game state is for menu vs playing, game phase is for phases of gameplay
  */
 export type GameState = 'menu' | 'playing' | 'gameover'
+export type GamePhase = 'idle' | 'playing' | 'revealing' | 'gameover'
