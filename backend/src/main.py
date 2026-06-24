@@ -5,6 +5,7 @@ from .dependencies import SessionDep
 from .database import create_db_and_tables, get_session, engine
 from . import models   # for initialising database
 from contextlib import asynccontextmanager
+from fastapi.middleware.cors import CORSMiddleware
 
 # create dbs on start
 @asynccontextmanager
@@ -15,6 +16,15 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['http://localhost:5173'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 app.include_router(games.router)
 app.include_router(players.router)
