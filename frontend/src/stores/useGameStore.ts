@@ -1,12 +1,73 @@
 import { create } from 'zustand'
-import type { GameState } from '../types/game'
+import type { GamePhase, GameState } from '../types/game'
+import type { NewGameResponse, PlayerPreview, PlayerStat } from '../types/api'
 
 interface GameStore {
 	gameState: GameState
+
+	phase: GamePhase
+
+  timeLeft: number
+  score: number
+  sessionToken: string | null
+  gameId: number | null
+  statCategory: string | null
+  playerA: PlayerStat | null
+  playerB: PlayerPreview | null
+  playerBRevealed: PlayerStat | null
+
 	setGameState: (state: GameState) => void
+
+	setPhase: (phase: GamePhase) => void
+
+  setTimeLeft: (time: number) => void
+  setScore: (score: number) => void
+  loadRound: (round: NewGameResponse) => void
+  revealPlayerB: (player: PlayerStat) => void
+  reset: () => void
 }
 
 export const useGameStore = create<GameStore>((set) => ({
 	gameState: 'menu',
-	setGameState: (gameState) => set({ gameState })
+
+	phase: 'idle',
+
+  timeLeft: 5,
+  score: 0,
+  sessionToken: null,
+  gameId: null,
+  statCategory: null,
+  playerA: null,
+  playerB: null,
+  playerBRevealed: null,
+
+	setGameState: (gameState) => set({ gameState }),
+
+	setPhase: (phase) => set({ phase }),
+  setTimeLeft: (timeLeft) => set({ timeLeft }),
+  setScore: (score) => set({ score }),
+
+  loadRound: (round) => set({
+    sessionToken: round.session_token,
+    gameId: round.game_id,
+    statCategory: round.stat_category,
+    playerA: round.player_a,
+    playerB: round.player_b,
+    playerBRevealed: null,
+    timeLeft: 5,
+    phase: 'playing'
+  }),
+
+  revealPlayerB: (player) => set({ playerBRevealed: player }),
+
+  reset: () => set({
+    phase: 'idle',
+    score: 0,
+    timeLeft: 5,
+    sessionToken: null,
+    gameId: null,
+    playerA: null,
+    playerB: null,
+    playerBRevealed: null
+	})
 }))
