@@ -1,19 +1,19 @@
-import { useGameStore } from "../../stores/useGameStore"
 import MenuButtonWidget from "./MenuButtonWidget"
 import styles from "./MenuWidget.module.css"
-import { type StartGameRequest } from "../../types/api"
 import { useGameEngine } from "../../hooks/useGameEngine"
+import { useSettingsStore } from "../../stores/useSettingsStore"
 
 export default function MenuWidget() {
-  const setGameState = useGameStore((state) => state.setGameState)
+  //const setGameState = useGameStore((state) => state.setGameState)
 
   // note: testing purposes
-  const startGameOptions: StartGameRequest = {
-    type: 'career',
-    category: 'ppg'
-  }
+  const setStatType = useSettingsStore((state) => state.setStatType)
+  const setStatCategory = useSettingsStore((state) => state.setStatCategory)
 
-  const { handleStartGame } = useGameEngine({ startGameOptions })
+  setStatType('career')
+  setStatCategory('ppg')
+
+  const { handleStartGame } = useGameEngine({})
 
   return (
     <div className={styles.panel}>
