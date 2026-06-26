@@ -14,12 +14,13 @@ export function useGameEngine({ startGameOptions }: GameEngineProps) {
 	const handleStartGame = useCallback(async () => {
 		try {
 			const round = await startGame(startGameOptions)
+			console.log('start round:', round)
 			loadRound(round)
 			setGameState('playing')
 		} catch (e) {
-			console.error('Failed to start game:', e)
+			console.error('failed to start game:', e)
 		}
 	}, [startGameOptions])
 
-	return handleStartGame
+	return { handleStartGame }
 }

@@ -1,9 +1,19 @@
 import { useGameStore } from "../../stores/useGameStore"
 import MenuButtonWidget from "./MenuButtonWidget"
 import styles from "./MenuWidget.module.css"
+import { type StartGameRequest } from "../../types/api"
+import { useGameEngine } from "../../hooks/useGameEngine"
 
 export default function MenuWidget() {
   const setGameState = useGameStore((state) => state.setGameState)
+
+  // note: testing purposes
+  const startGameOptions: StartGameRequest = {
+    type: 'career',
+    category: 'ppg'
+  }
+
+  const { handleStartGame } = useGameEngine({ startGameOptions })
 
   return (
     <div className={styles.panel}>
@@ -11,7 +21,7 @@ export default function MenuWidget() {
 
       <MenuButtonWidget 
         text="Start Game"
-        clickEvent={() => setGameState('playing')}
+        clickEvent={ handleStartGame }
       />
 
       <MenuButtonWidget 
