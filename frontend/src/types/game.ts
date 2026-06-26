@@ -36,5 +36,18 @@ export type AnimationName = typeof ANIMATIONS[number]
  * Game loop related
  * Game state is for menu vs playing, game phase is for phases of gameplay
  */
-export type GameState = 'menu' | 'playing' | 'gameover'
-export type GamePhase = 'idle' | 'playing' | 'revealing' | 'gameover'
+const GameState = {
+  Menu: 'menu',
+  Playing: 'playing',
+  GameOver: 'gameover',
+} as const
+
+const GamePhase = {
+  Idle: 'idle',
+  Playing: 'playing',
+  Revealing: 'revealing',
+  GameOver: 'gameover',
+} as const
+
+export type GameState = typeof GameState[keyof typeof GameState]
+export type GamePhase = typeof GamePhase[keyof typeof GamePhase]
