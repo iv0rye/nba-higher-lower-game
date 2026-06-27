@@ -10,6 +10,7 @@ export default function UIOverlayView() {
   const playerBRevealed = useGameStore((state) => state.playerBRevealed)
   const score = useGameStore((state) => state.score)
   const timeLeft = useGameStore((state) => state.timeLeft)
+  const statCategory = useGameStore((state) => state.statCategory)
   
   return (
     <div className={styles.overlay}>
@@ -40,6 +41,7 @@ export default function UIOverlayView() {
             playerAName={playerA.name} 
             playerBName={playerB.name} 
             timeLeft={timeLeft}
+            statCategory={statCategory ? statCategory.toUpperCase() : undefined}
           />
         }
       </div>
