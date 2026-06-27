@@ -1,3 +1,4 @@
+import { catLabelToDisplayText } from "../../utils/toDisplayText"
 import styles from "./TimerWidget.module.css"
 
 interface Props {
@@ -8,11 +9,11 @@ interface Props {
 }
 
 export default function TimerWidget({ playerAName, playerBName, timeLeft=5, statCategory='PPG' }: Props) {
-  // TODO: probably want to have a hashmap or some sort to convert abbr. of stat category to actual words
   return(
     <div className={styles.panel}>
       <span className={styles.question}>
-        Does <b>{playerAName}</b> have a higher <b>{statCategory}</b> than <b>{playerBName}</b>?
+        {/* TEMP: career **should** be swapped to statType attribute if seasons based is implemented */}
+        Does <b>{playerAName}</b> have a higher career {catLabelToDisplayText(statCategory ?? 'ppg')} than <b>{playerBName}</b>?
       </span>
       <span className={styles.timer}>{timeLeft}</span>
     </div>
