@@ -36,7 +36,11 @@ export default function UIOverlayView() {
       </div>
       <div className={styles.bottom}>
         { playerA && playerB && 
-          <TimerWidget playerAName={playerA.name} playerBName={playerB.name} />
+          <TimerWidget 
+            playerAName={playerA.name} 
+            playerBName={playerB.name} 
+            timeLeft={timeLeft}
+          />
         }
       </div>
     </div>
