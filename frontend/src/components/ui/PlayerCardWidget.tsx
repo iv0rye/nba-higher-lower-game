@@ -2,7 +2,7 @@ import styles from "./PlayerCardWidget.module.css"
 
 interface Props {
   name: string,
-  headshotURL: string,
+  headshotURL?: string | null,
   statLabel: string,
   stat?: number | string
 }
@@ -10,11 +10,13 @@ interface Props {
 export default function PlayerCardWidget({ name, headshotURL, statLabel, stat="???" }: Props) {
   return(
     <div className={styles.panel}>
+      { headshotURL && 
       <img 
         src={headshotURL} 
         alt={name}
         className={styles.headshot} 
       />
+      }
 
       <div className={styles.info}>
         <span className={styles.name}>{name}</span>
