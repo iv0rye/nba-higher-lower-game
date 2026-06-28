@@ -16,6 +16,8 @@ interface GameStore {
   playerB: PlayerPreview | null
   playerBRevealed: PlayerStat | null
 
+  nextRound: NewGameResponse | null
+
 	setGameState: (state: GameState) => void
 
 	setPhase: (phase: GamePhase) => void
@@ -25,6 +27,8 @@ interface GameStore {
   loadRound: (round: NewGameResponse) => void
   revealPlayerB: (player: PlayerStat) => void
   reset: () => void
+
+  setNextRound: (nextRound: NewGameResponse) => void
 }
 
 export const useGameStore = create<GameStore>((set) => ({
@@ -40,6 +44,8 @@ export const useGameStore = create<GameStore>((set) => ({
   playerA: null,
   playerB: null,
   playerBRevealed: null,
+
+  nextRound: null,
 
 	setGameState: (gameState) => set({ gameState }),
 
@@ -69,5 +75,7 @@ export const useGameStore = create<GameStore>((set) => ({
     playerA: null,
     playerB: null,
     playerBRevealed: null
-	})
+	}),
+
+  setNextRound: (nextRound) => set({ nextRound })
 }))
