@@ -32,7 +32,7 @@ interface GameStore {
   revealPlayerB: (player: PlayerStat) => void
   reset: () => void
 
-  setNextRound: (nextRound: NewGameResponse) => void
+  setNextRound: (nextRound: NewGameResponse | null) => void
 }
 
 export const useGameStore = create<GameStore>((set) => ({
