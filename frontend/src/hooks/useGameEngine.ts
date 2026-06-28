@@ -45,5 +45,15 @@ export function useGameEngine({  }: GameEngineProps) {
 		}
 	}, [setGuessResult])
 
-	return { handleStartGame, handleGuess }
+	const handleNextRound = useCallback(async () => {
+		const { nextRound } = useGameStore.getState()
+
+    if (nextRound) {
+      loadRound(nextRound)
+    } else {
+      setGameState('gameover')
+    }
+  }, [loadRound, setGameState])
+
+	return { handleStartGame, handleGuess, handleNextRound }
 }
