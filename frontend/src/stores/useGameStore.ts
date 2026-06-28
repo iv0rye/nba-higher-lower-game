@@ -7,6 +7,8 @@ interface GameStore {
 
 	phase: GamePhase
 
+  gameOngoing: boolean
+
   timeLeft: number
   score: number
   sessionToken: string | null
@@ -22,6 +24,8 @@ interface GameStore {
 
 	setPhase: (phase: GamePhase) => void
 
+  setGameOngoing: (gameOngoing: boolean) => void
+
   setTimeLeft: (time: number) => void
   setScore: (score: number) => void
   loadRound: (round: NewGameResponse) => void
@@ -35,6 +39,8 @@ export const useGameStore = create<GameStore>((set) => ({
 	gameState: 'menu',
 
 	phase: 'idle',
+
+  gameOngoing: false,
 
   timeLeft: 5,
   score: 0,
@@ -50,6 +56,7 @@ export const useGameStore = create<GameStore>((set) => ({
 	setGameState: (gameState) => set({ gameState }),
 
 	setPhase: (phase) => set({ phase }),
+  setGameOngoing: (gameOngoing) => set({ gameOngoing }),
   setTimeLeft: (timeLeft) => set({ timeLeft }),
   setScore: (score) => set({ score }),
 
@@ -61,7 +68,9 @@ export const useGameStore = create<GameStore>((set) => ({
     playerB: round.player_b,
     playerBRevealed: null,
     timeLeft: 5,
-    phase: 'playing'
+    phase: 'playing',
+    nextRound: null,
+    gameOngoing: true
   }),
 
   revealPlayerB: (player) => set({ playerBRevealed: player }),
