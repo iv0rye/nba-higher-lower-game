@@ -4,6 +4,7 @@ import { useGameStore } from '../stores/useGameStore'
 
 export function useGameTimer(onTimerEnd: () => void) {
   const accumulated = useRef(0)
+	const timerFired = useRef(false)
   const onTimerEndRef = useRef(onTimerEnd)
   onTimerEndRef.current = onTimerEnd
 
@@ -12,6 +13,7 @@ export function useGameTimer(onTimerEnd: () => void) {
 
     if (phase !== 'playing') {
       accumulated.current = 0
+			timerFired.current = false
       return
     }
 
@@ -21,7 +23,8 @@ export function useGameTimer(onTimerEnd: () => void) {
       accumulated.current = 0
       const newTime = timeLeft - 1
 
-      if (newTime <= 0) {
+      if (newTime <= 0 && !timerFired.current) {
+				timerFired.current = true
         setTimeLeft(0)
         onTimerEndRef.current()
       } else {
