@@ -9,11 +9,8 @@ interface GameEngineProps {
 export function useGameEngine({  }: GameEngineProps) {
 	const loadRound = useGameStore((state) => state.loadRound)
 	const setGameState = useGameStore((state) => state.setGameState)
-	const revealPlayerB = useGameStore((state) => state.revealPlayerB)
-	const setNextRound = useGameStore((state) => state.setNextRound)
-	const setScore = useGameStore((state) => state.setScore)
-	const setPhase = useGameStore((state) => state.setPhase)
-	const setGameOngoing = useGameStore((state) => state.setGameOngoing)
+	
+	const setGuessResult = useGameStore((state) => state.setGuessResult)
 
 	const handleStartGame = useCallback(async () => {
 		try {
@@ -41,18 +38,12 @@ export function useGameEngine({  }: GameEngineProps) {
 				game_id: gameId,
 				is_a_over_b: isAOverB
 			})
-
-			revealPlayerB(newRound.player_b)
-
-			setNextRound(newRound.next_round)
-			setScore(newRound.score)
-			setGameOngoing(newRound.session_active)
-			setPhase('revealing')
-
+			// refer to game store to see what this sets
+			setGuessResult(newRound)
 		} catch (e) {
 			console.error('failed to submit guess:', e)
 		}
-	}, [])
+	}, [setGuessResult])
 
 	return { handleStartGame, handleGuess }
 }

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import type { GamePhase, GameState } from '../types/game'
-import type { NewGameResponse, PlayerPreview, PlayerStat } from '../types/api'
+import type { GuessResponse, NewGameResponse, PlayerPreview, PlayerStat } from '../types/api'
 
 interface GameStore {
 	gameState: GameState
@@ -33,6 +33,8 @@ interface GameStore {
   reset: () => void
 
   setNextRound: (nextRound: NewGameResponse | null) => void
+
+  setGuessResult: (guessResponse: GuessResponse) => void
 }
 
 export const useGameStore = create<GameStore>((set) => ({
@@ -86,5 +88,13 @@ export const useGameStore = create<GameStore>((set) => ({
     playerBRevealed: null
 	}),
 
-  setNextRound: (nextRound) => set({ nextRound })
+  setNextRound: (nextRound) => set({ nextRound }),
+
+  setGuessResult: (guessResponse) => set({
+    playerBRevealed: guessResponse.player_b,
+    nextRound: guessResponse.next_round,
+    score: guessResponse.score,
+    gameOngoing: guessResponse.session_active,
+    phase: 'revealing'
+  })
 }))
