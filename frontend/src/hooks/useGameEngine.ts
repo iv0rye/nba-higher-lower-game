@@ -9,6 +9,7 @@ interface GameEngineProps {
 export function useGameEngine({  }: GameEngineProps) {
 	const loadRound = useGameStore((state) => state.loadRound)
 	const setGameState = useGameStore((state) => state.setGameState)
+	const setPhase = useGameStore((state) => state.setPhase)
 	
 	const setGuessResult = useGameStore((state) => state.setGuessResult)
 
@@ -52,8 +53,9 @@ export function useGameEngine({  }: GameEngineProps) {
       loadRound(nextRound)
     } else {
       setGameState('gameover')
+			setPhase('gameover')
     }
-  }, [loadRound, setGameState])
+  }, [loadRound, setGameState, setPhase])
 
 	return { handleStartGame, handleGuess, handleNextRound }
 }
