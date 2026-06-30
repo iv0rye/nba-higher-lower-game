@@ -1,11 +1,10 @@
 import { useAnimations, useGLTF } from "@react-three/drei"
-import { useRef } from "react"
-import * as THREE from 'three'
 import { useKeysContext } from "../context/keysContext"
 import { usePlayerMovement } from "../hooks/usePlayerMovement"
 import { usePlayerAnimation } from "../hooks/usePlayerAnimation"
 import { useCameraMovement } from "../hooks/useCameraMovement"
 import { useGameStore } from "../stores/useGameStore"
+import { usePlayerRefContext } from "../context/playerRefContext"
 
 interface PlayerProps {
   position?: [number, number, number]
@@ -19,7 +18,7 @@ export default function Player(
   rotation = [0, 0, 0],
   scale = 0.004
 } : PlayerProps) {
-  const playerRef = useRef<THREE.Group>(null)
+  const playerRef = usePlayerRefContext()
   const { scene, animations } = useGLTF('/models/character.glb')
   const { actions } = useAnimations(animations, scene)
   const gameState = useGameStore((state) => state.gameState)
