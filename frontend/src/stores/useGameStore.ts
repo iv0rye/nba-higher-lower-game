@@ -95,7 +95,6 @@ export const useGameStore = create<GameStore>((set) => ({
     phase: 'idle',
     score: 0,
     timeLeft: 5,
-    sessionToken: null,
     gameId: null,
     playerA: null,
     playerB: null,

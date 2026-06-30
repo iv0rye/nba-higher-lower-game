@@ -6,9 +6,9 @@ import { useSettingsStore } from "../stores/useSettingsStore"
 export function useGameEngine() {
 	const loadRound = useGameStore((state) => state.loadRound)
 	const setGameState = useGameStore((state) => state.setGameState)
-	const setPhase = useGameStore((state) => state.setPhase)
 	const startGameInStore = useGameStore((state) => state.startGame)
 	const setGuessResult = useGameStore((state) => state.setGuessResult)
+	const reset = useGameStore((state) => state.reset)
 
 	const handleStartGame = useCallback(async () => {
 		try {
@@ -53,9 +53,9 @@ export function useGameEngine() {
 			loadRound(nextRound)
 		} else {
 			setGameState('gameover')
-			setPhase('gameover')
+			reset()
 		}
-	}, [loadRound, setGameState, setPhase])
+	}, [loadRound, setGameState, reset])
 
 	return { handleStartGame, handleGuess, handleNextRound }
 }

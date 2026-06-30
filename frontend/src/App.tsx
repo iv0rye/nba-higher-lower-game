@@ -7,6 +7,7 @@ import LoadingScreenView from './views/LoadingScreenView'
 import UIOverlayView from './views/UIOverlayView'
 import MenuView from './views/MenuView'
 import { Route, Routes } from 'react-router-dom'
+import EndGameView from './views/EndGameView'
 
 export default function App() {
   const { keys } = useKeys()
@@ -24,6 +25,7 @@ export default function App() {
             <GameView />
             {loaded && gameState === 'menu' && <MenuView />}
             {loaded && gameState === 'playing' && <UIOverlayView />}
+            {loaded && gameState === 'gameover' && <EndGameView />}
           </div>
         } />
 
