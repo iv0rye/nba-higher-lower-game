@@ -32,6 +32,7 @@ export default function UIOverlayView() {
             headshotURL={playerB.photo_url} 
             statLabel={playerB.stat_category} 
             stat={playerBRevealed ? playerBRevealed.stat_value : undefined} 
+            isIncrementing={true}
           />
         }
       </div>

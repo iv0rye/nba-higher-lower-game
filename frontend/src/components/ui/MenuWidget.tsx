@@ -13,7 +13,7 @@ export default function MenuWidget() {
   setStatType('career')
   setStatCategory('ppg')
 
-  const { handleStartGame } = useGameEngine({})
+  const { handleStartGame } = useGameEngine()
 
   return (
     <div className={styles.panel}>
