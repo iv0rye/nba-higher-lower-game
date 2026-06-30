@@ -8,7 +8,7 @@ export function useGameEngine() {
 	const setGameState = useGameStore((state) => state.setGameState)
 	const startGameInStore = useGameStore((state) => state.startGame)
 	const setGuessResult = useGameStore((state) => state.setGuessResult)
-	const reset = useGameStore((state) => state.reset)
+	const setPhase = useGameStore((state) => state.setPhase)
 
 	const handleStartGame = useCallback(async () => {
 		try {
@@ -53,9 +53,9 @@ export function useGameEngine() {
 			loadRound(nextRound)
 		} else {
 			setGameState('gameover')
-			reset()
+			setPhase('gameover')
 		}
-	}, [loadRound, setGameState, reset])
+	}, [loadRound, setGameState, setPhase])
 
 	return { handleStartGame, handleGuess, handleNextRound }
 }
