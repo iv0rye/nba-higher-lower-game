@@ -1,17 +1,19 @@
 import { useEffect, useState } from 'react'
 
-const COUNT_DURATION_MS = 1200
+const COUNT_DURATION_MS = 1000
 const TICK_MS = 8
+const ON_COMPLETE_DELAY_MS = 800
 
 function easeOut(t: number): number {
   return 1 - Math.pow(1 - t, 3)
 }
 
-export function useIncreasingNumber(target: number | undefined, active: boolean, onComplete: () => void) {
+// consideration: add amount of DP as param and return fixed to that
+export function useIncreasingNumber(target: number | undefined, onComplete: () => void) {
   const [value, setValue] = useState(0)
-
+	
   useEffect(() => {
-    if (!active || target === undefined) {
+    if (target === undefined) {
       setValue(0)
       return
     }
@@ -26,14 +28,14 @@ export function useIncreasingNumber(target: number | undefined, active: boolean,
       if (progress >= 1) {
         setValue(target)
         clearInterval(interval)
-        onComplete()
+        setTimeout(onComplete, ON_COMPLETE_DELAY_MS)
       } else {
         setValue(target * eased)
       }
     }, TICK_MS)
 
     return () => clearInterval(interval)
-  }, [active, target])
+  }, [target])
 
   return value
 }

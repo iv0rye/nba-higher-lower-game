@@ -14,21 +14,16 @@ interface Props {
 export default function PlayerCardWidget({ name, headshotURL, statLabel, stat, isIncrementing=false }: Props) {
   const phase = useGameStore((state) => state.phase)
   const { handleNextRound } = useGameEngine()
+  let displayValue
 
-  const isRevealing = phase === 'revealing' && isIncrementing
+  if (isIncrementing) {
+    const isRevealing = phase === 'revealing'
+    const displayedStat = useIncreasingNumber(stat, handleNextRound).toFixed(2)
 
-  const displayedStat = useIncreasingNumber(
-    isIncrementing ? stat : undefined, 
-    isRevealing,
-    isIncrementing ? handleNextRound : () => {}
-  )
-
-  // if
-  const displayValue = 
-    stat ? 
-      isIncrementing ? 
-        (isRevealing ? displayedStat : '???') : stat 
-      : '???'
+    displayValue = stat ? (isRevealing ? displayedStat : '???') : '???'
+  } else {
+    displayValue = stat ? stat : '???'
+  }
 
   return(
     <div className={styles.panel}>
