@@ -1,6 +1,7 @@
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useRef, type RefObject } from 'react'
 import * as THREE from 'three'
+import { useGameStore } from '../stores/useGameStore'
 
 // note: camera offset is effectively distance from origin (player)
 const OFFSET = new THREE.Vector3(0, 12, 12)
@@ -23,6 +24,7 @@ export function useCameraMovement({ playerRef, isPlaying=true }: Props) {
   const atPlayPosition = useRef(false)
   const lookAtTarget = useRef(INTRO_TARGET.clone())
   const mouseOffset = useRef(new THREE.Vector2(0, 0))
+  const setPhase = useGameStore((state) => state.setPhase)
 
   useEffect(() => {
     const onMouseMove = (e: MouseEvent) => {
@@ -51,7 +53,7 @@ export function useCameraMovement({ playerRef, isPlaying=true }: Props) {
     }
 
     if (!atPlayPosition.current) {
-      panCamera(camera, atPlayPosition, lookAtTarget)
+      panCamera(camera, atPlayPosition, lookAtTarget, () => setPhase('playing'))
       return
     }
 
@@ -73,7 +75,7 @@ function followPlayer(camera: THREE.Camera, playerRef: RefObject<THREE.Group | n
   camera.position.z = THREE.MathUtils.lerp(camera.position.z, tz + OFFSET.z, LERP)
 }
 
-function panCamera(camera: THREE.Camera, atPlayPosition: RefObject<boolean>, lookAtTarget: RefObject<THREE.Vector3>) {
+function panCamera(camera: THREE.Camera, atPlayPosition: RefObject<boolean>, lookAtTarget: RefObject<THREE.Vector3>, onComplete: () => void) {
   /**
    * Pans camera from sky to play area 
    */
@@ -82,5 +84,6 @@ function panCamera(camera: THREE.Camera, atPlayPosition: RefObject<boolean>, loo
 
   if (lookAtTarget.current.distanceTo(PLAY_TARGET) < 0.1) {
     atPlayPosition.current = true
+    onComplete()
   }
 }

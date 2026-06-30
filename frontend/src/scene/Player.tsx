@@ -22,7 +22,6 @@ export default function Player(
   const { scene, animations } = useGLTF('/models/character.glb')
   const { actions } = useAnimations(animations, scene)
   const gameState = useGameStore((state) => state.gameState)
-  const phase = useGameStore((state) => state.phase)
 
   const keysRef = useKeysContext()
 
@@ -31,7 +30,7 @@ export default function Player(
   usePlayerMovement({ playerRef, keysRef, enabled: gameState === 'playing' })
   // note: returns triggerAnimation and clearOverride which will be used for game logic
   usePlayerAnimation({ actions, playerRef })
-  useCameraMovement({ playerRef, isPlaying: phase === 'playing' })
+  useCameraMovement({ playerRef, isPlaying: gameState === 'playing' })
 
   return (
     <primitive 

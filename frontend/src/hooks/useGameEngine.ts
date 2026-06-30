@@ -7,7 +7,7 @@ export function useGameEngine() {
 	const loadRound = useGameStore((state) => state.loadRound)
 	const setGameState = useGameStore((state) => state.setGameState)
 	const setPhase = useGameStore((state) => state.setPhase)
-	
+	const startGameInStore = useGameStore((state) => state.startGame)
 	const setGuessResult = useGameStore((state) => state.setGuessResult)
 
 	const handleStartGame = useCallback(async () => {
@@ -17,12 +17,12 @@ export function useGameEngine() {
 			const round = await startGame(startGameOptions)
 
 			console.log('start round:', round)
-			loadRound(round)
+			startGameInStore(round)
 			setGameState('playing')
 		} catch (e) {
 			console.error('failed to start game:', e)
 		}
-	}, [loadRound, setGameState])
+	}, [startGameInStore, setGameState])
 
 	const handleGuess = useCallback(async (isAOverB: boolean) => {
 		try {
