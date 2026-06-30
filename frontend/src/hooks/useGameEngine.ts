@@ -31,6 +31,8 @@ export function useGameEngine() {
 			if (!sessionToken || !gameId || phase !== 'playing')
 				return
 
+			console.log('guess submitted: a is over b? =', isAOverB)
+
 			const newRound = await submitGuess({
 				session_token: sessionToken,
 				game_id: gameId,

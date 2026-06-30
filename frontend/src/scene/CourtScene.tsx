@@ -5,6 +5,7 @@ import Player from './Player'
 import FlushInput from './FlushInput'
 import { Suspense } from 'react'
 import GameTimer from './GameTimer'
+import DebugPlayerPosition from './DebugPlayerPosition'
 
 
 export default function CourtScene() {
