@@ -29,6 +29,7 @@ interface GameStore {
   setTimeLeft: (time: number) => void
   setScore: (score: number) => void
   loadRound: (round: NewGameResponse) => void
+  startGame: (round: NewGameResponse) => void
   revealPlayerB: (player: PlayerStat) => void
   reset: () => void
 
@@ -71,6 +72,19 @@ export const useGameStore = create<GameStore>((set) => ({
     playerBRevealed: null,
     timeLeft: 5,
     phase: 'playing',
+    nextRound: null,
+    gameOngoing: true
+  }),
+
+  startGame: (round) => set({
+    sessionToken: round.session_token,
+    gameId: round.game_id,
+    statCategory: round.stat_category,
+    playerA: round.player_a,
+    playerB: round.player_b,
+    playerBRevealed: null,
+    timeLeft: 5,
+    phase: 'intro',
     nextRound: null,
     gameOngoing: true
   }),

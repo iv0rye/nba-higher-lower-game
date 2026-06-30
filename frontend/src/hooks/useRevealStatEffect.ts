@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
-const COUNT_DURATION_MS = 1000
+const COUNT_DURATION_MS = 1200
 const TICK_MS = 8
 const ON_COMPLETE_DELAY_MS = 800
 
 function easeOut(t: number): number {
-  return 1 - Math.pow(1 - t, 3)
+  return 1 - Math.pow(1 - t, 4)
 }
 
 // consideration: add amount of DP as param and return fixed to that

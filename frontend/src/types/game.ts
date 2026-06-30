@@ -44,6 +44,7 @@ const GameState = {
 
 const GamePhase = {
   Idle: 'idle',
+  Intro: 'intro',
   Playing: 'playing',
   Revealing: 'revealing',
   GameOver: 'gameover',
