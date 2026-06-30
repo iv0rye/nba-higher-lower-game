@@ -3,10 +3,7 @@ import { useGameStore } from "../stores/useGameStore"
 import { startGame, submitGuess } from "../api/game"
 import { useSettingsStore } from "../stores/useSettingsStore"
 
-interface GameEngineProps {
-}
-
-export function useGameEngine({  }: GameEngineProps) {
+export function useGameEngine() {
 	const loadRound = useGameStore((state) => state.loadRound)
 	const setGameState = useGameStore((state) => state.setGameState)
 	const setPhase = useGameStore((state) => state.setPhase)
