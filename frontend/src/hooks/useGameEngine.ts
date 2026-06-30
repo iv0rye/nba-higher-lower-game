@@ -36,6 +36,7 @@ export function useGameEngine() {
 				game_id: gameId,
 				is_a_over_b: isAOverB
 			})
+			console.log('successful guess:', newRound)
 			// refer to game store to see what this sets
 			setGuessResult(newRound)
 		} catch (e) {
@@ -46,13 +47,13 @@ export function useGameEngine() {
 	const handleNextRound = useCallback(async () => {
 		const { nextRound } = useGameStore.getState()
 
-    if (nextRound) {
-      loadRound(nextRound)
-    } else {
-      setGameState('gameover')
+		if (nextRound) {
+			loadRound(nextRound)
+		} else {
+			setGameState('gameover')
 			setPhase('gameover')
-    }
-  }, [loadRound, setGameState, setPhase])
+		}
+	}, [loadRound, setGameState, setPhase])
 
 	return { handleStartGame, handleGuess, handleNextRound }
 }

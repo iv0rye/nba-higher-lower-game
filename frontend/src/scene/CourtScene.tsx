@@ -4,6 +4,7 @@ import Court from './Court'
 import Player from './Player'
 import FlushInput from './FlushInput'
 import { Suspense } from 'react'
+import GameTimer from './GameTimer'
 
 
 export default function CourtScene() {
@@ -35,6 +36,7 @@ export default function CourtScene() {
 
         {/* utility */}
         <FlushInput />
+        <GameTimer />
       </Suspense>
     </Canvas>
   )
