@@ -7,9 +7,10 @@ export default function GameTimer() {
   const { handleGuess } = useGameEngine()
   const playerRef = usePlayerRefContext()
 
-  const playerZone = getPlayerZone(playerRef)
-  
-  useGameTimer(() => handleGuess(playerZone === 'higher'))
+  useGameTimer(() => {
+    const playerZone = getPlayerZone(playerRef)
+    handleGuess(playerZone === 'higher')
+  })
 
   return null
 }
