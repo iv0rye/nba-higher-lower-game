@@ -9,7 +9,7 @@ function easeOut(t: number): number {
 }
 
 // consideration: add amount of DP as param and return fixed to that
-export function useIncreasingNumber(target: number | undefined, onComplete: () => void) {
+export function useRevealStatEffect(target: number | undefined, onComplete: () => void) {
   const [value, setValue] = useState(0)
 	
   useEffect(() => {

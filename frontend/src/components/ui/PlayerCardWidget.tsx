@@ -1,5 +1,5 @@
 import { useGameEngine } from "../../hooks/useGameEngine"
-import { useIncreasingNumber } from "../../hooks/useIncreasingNumber"
+import { useRevealStatEffect } from "../../hooks/useRevealStatEffect"
 import { useGameStore } from "../../stores/useGameStore"
 import styles from "./PlayerCardWidget.module.css"
 
@@ -18,7 +18,7 @@ export default function PlayerCardWidget({ name, headshotURL, statLabel, stat, i
 
   if (isIncrementing) {
     const isRevealing = phase === 'revealing'
-    const displayedStat = useIncreasingNumber(stat, handleNextRound).toFixed(2)
+    const displayedStat = useRevealStatEffect(stat, handleNextRound).toFixed(2)
 
     displayValue = stat ? (isRevealing ? displayedStat : '???') : '???'
   } else {
