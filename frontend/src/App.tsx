@@ -22,9 +22,13 @@ export default function App() {
       <Routes>
         <Route path="/" element={
           <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+            
             <GameView />
+
             {loaded && gameState === 'menu' && <MenuView />}
+
             {loaded && gameState === 'playing' && <UIOverlayView />}
+            
             {loaded && gameState === 'gameover' && <EndGameView />}
           </div>
         } />

@@ -39,3 +39,31 @@ export interface GuessRequest {
   game_id: number
   is_a_over_b: boolean
 }
+
+export interface GetGameRoundResponse {
+  id: number
+  session_id: number
+  player_a: PlayerStat
+  player_b: PlayerStat
+  guess_a_higher_b: boolean | null
+  is_correct: boolean | null
+}
+
+export interface GetSeasonResponse {
+  id: number
+  label: string
+  year_start: number
+  year_end: number
+}
+
+export interface GetGameSessionResponse {
+  id: number
+  session_token: string
+  created_at: string
+  score: number
+  is_active: boolean
+  stat_category: string
+  stat_type: string
+  rounds: GetGameRoundResponse[]
+  seasons: GetSeasonResponse[]
+}
