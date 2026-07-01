@@ -1,4 +1,4 @@
-import type { GuessRequest, GuessResponse, NewGameResponse, StartGameRequest } from "../types/api"
+import type { GetGameSessionResponse, GuessRequest, GuessResponse, NewGameResponse, StartGameRequest } from "../types/api"
 
 const BACKEND_URL = 'http://localhost:8000'
 
@@ -27,5 +27,14 @@ export async function submitGuess(req: GuessRequest): Promise<GuessResponse> {
   if (!res.ok) 
     throw new Error('Failed to submit guess')
 
+  return res.json()
+}
+
+export async function getGameSession(sessionToken: string): Promise<GetGameSessionResponse> {
+  const res = await fetch(`${BACKEND_URL}/game/${sessionToken}`)
+
+  if (!res.ok) 
+    throw new Error('Failed to fetch game session')
+  
   return res.json()
 }
