@@ -58,7 +58,12 @@ export default function EndGameWidget() {
         ))}
       </div>
 
-      <MenuButtonWidget text="Play Again" clickEvent={reset} />
+      <MenuButtonWidget 
+        text="Play Again" 
+        clickEvent={reset} 
+        height="5vh"
+      />
+
     </div>
   )
 }
