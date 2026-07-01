@@ -93,6 +93,7 @@ export const useGameStore = create<GameStore>((set) => ({
 
   reset: () => set({
     phase: 'idle',
+    gameState: 'menu',
     score: 0,
     timeLeft: 5,
     gameId: null,
