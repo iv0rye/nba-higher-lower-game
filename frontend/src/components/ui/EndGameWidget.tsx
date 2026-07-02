@@ -2,7 +2,6 @@ import { useGameHistory } from "../../hooks/useGameHistory";
 import { useGameStore } from "../../stores/useGameStore";
 import MenuButtonWidget from "./MenuButtonWidget";
 import styles from "./EndGameWidget.module.css"
-import PlayerCardWidget from "./PlayerCardWidget";
 import { getHighScore } from "../../utils/highScore";
 import RoundHistoryWidget from "./RoundHistoryWidget";
 
