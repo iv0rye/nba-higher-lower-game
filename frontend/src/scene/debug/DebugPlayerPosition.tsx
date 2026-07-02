@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber"
-import { usePlayerRefContext } from "../context/playerRefContext"
+import { usePlayerRefContext } from "../../context/playerRefContext"
 
 // delete this once main game logic is done
 export default function DebugPlayerPosition() {

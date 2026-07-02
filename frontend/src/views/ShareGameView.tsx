@@ -11,10 +11,12 @@ export default function ShareGameView() {
 
   if (!sessionToken) {
     return (
-      <ErrorWidget 
-        title="Invalid Session Token"
-        description="There was no session token provided."
-      />
+      <div className={styles.overlay}>
+        <ErrorWidget 
+          title="Invalid Session Token"
+          description="There was no session token provided."
+        />
+      </div>
     )
   }
 
@@ -22,10 +24,12 @@ export default function ShareGameView() {
 
   if (error) {
     return (
-      <ErrorWidget 
-        title="Invalid Session Token"
-        description="The session token provided is invalid. Please check the link and try again."
-      />
+      <div className={styles.overlay}>
+        <ErrorWidget 
+          title="Invalid Session Token"
+          description="The session token provided is invalid. Please check the link and try again."
+        />
+      </div>
     )
   }
 

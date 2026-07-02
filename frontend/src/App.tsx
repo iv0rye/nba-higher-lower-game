@@ -9,6 +9,7 @@ import MenuView from './views/MenuView'
 import { Route, Routes } from 'react-router-dom'
 import EndGameView from './views/EndGameView'
 import PageNotFoundView from './views/PageNotFoundView'
+import ShareGameView from './views/ShareGameView'
 
 export default function App() {
   const { keys } = useKeys()
@@ -40,7 +41,7 @@ export default function App() {
         <GameView />
 
         <Routes>
-          
+
           <Route path="/" element={
             <>
               {loaded && gameState === 'menu' && <MenuView />}
@@ -49,6 +50,10 @@ export default function App() {
               
               {loaded && gameState === 'gameover' && <EndGameView />}
             </>
+          } />
+
+          <Route path="/share/:sessionToken" element={
+            <ShareGameView />
           } />
 
           <Route path="*" element={
