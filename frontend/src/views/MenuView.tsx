@@ -28,7 +28,7 @@ export default function MenuView() {
         />
 
         <MenuButtonWidget 
-          text="Search"
+          text="Search Game Database"
         />
 
         <div className={styles.credit}>

@@ -36,7 +36,7 @@ export default function ShareGameView() {
   return(
     <div className={styles.overlay}>
       <div className={styles.panel}>
-        <span className={styles.title}>Game Played:</span>
+        <span className={styles.title}>Score:</span>
         <span className={styles.score}>{history?.score}</span>
         {loading && <span className={styles.loading}>Loading...</span>}
 
