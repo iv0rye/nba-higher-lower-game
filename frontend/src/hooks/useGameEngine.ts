@@ -3,6 +3,7 @@ import { useGameStore } from "../stores/useGameStore"
 import { startGame, submitGuess } from "../api/game"
 import { useSettingsStore } from "../stores/useSettingsStore"
 import { saveHighScore } from "../utils/highScore"
+import sounds from "../audio/sounds"
 
 export function useGameEngine() {
 	const loadRound = useGameStore((state) => state.loadRound)
@@ -52,11 +53,13 @@ export function useGameEngine() {
 
 		if (nextRound) {
 			loadRound(nextRound)
+			sounds.win.play()
 		} else {
 			const { score, statCategory } = useGameStore.getState()
 			saveHighScore(score, statCategory)
 			setGameState('gameover')
 			setPhase('gameover')
+			sounds.lose.play()
 		}
 	}, [loadRound, setGameState, setPhase])
 

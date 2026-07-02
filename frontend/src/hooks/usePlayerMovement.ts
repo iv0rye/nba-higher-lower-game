@@ -3,9 +3,11 @@ import * as THREE from 'three'
 import type { KeysRef } from "../types/game";
 import { useFrame } from "@react-three/fiber";
 import { DEFAULT_BINDINGS, isActionActive } from "../config/keyBinds";
+import sounds from "../audio/sounds";
 
 const SPEED = 4
 const ROTATION_SPEED = 10
+const FOOTSTEP_GAP = 400
 
 const LEVEL_BOUNDS = new THREE.Box2( 
   new THREE.Vector2(-7, -4),  // min x, z
@@ -20,6 +22,7 @@ interface Props {
 
 export function usePlayerMovement({ playerRef, keysRef, enabled=true }: Props) {
   const direction = new THREE.Vector2(0, 0)
+  const lastFootstep = useRef(0)
 
   const targetQuaternion = useRef(new THREE.Quaternion())
 
@@ -44,6 +47,14 @@ export function usePlayerMovement({ playerRef, keysRef, enabled=true }: Props) {
 
     // if there was input
     if (direction.lengthSq() > 0) {
+      // audio processing
+      const now = performance.now()
+
+      if (now - lastFootstep.current > FOOTSTEP_GAP) {
+        sounds.footstep.play()
+        lastFootstep.current = now
+      }
+
       playerRef.current.position.x += direction.x * SPEED * delta
       playerRef.current.position.z += direction.y * SPEED * delta
 

@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGameStore } from '../stores/useGameStore'
+import sounds from '../audio/sounds'
 
 export function useGameTimer(onTimerEnd: () => void) {
   const accumulated = useRef(0)
@@ -28,6 +29,7 @@ export function useGameTimer(onTimerEnd: () => void) {
         setTimeLeft(0)
         onTimerEndRef.current()
       } else {
+        sounds.tick.play()
         setTimeLeft(newTime)
       }
     }
