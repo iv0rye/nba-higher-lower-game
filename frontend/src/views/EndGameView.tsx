@@ -1,11 +1,40 @@
-import EndGameWidget from "../components/ui/EndGameWidget"
-import styles from "./MenuView.module.css"
+import MenuButtonWidget from "../components/ui/MenuButtonWidget"
+import RoundHistoryWidget from "../components/ui/RoundHistoryWidget"
+import { useGameHistory } from "../hooks/useGameHistory"
+import { useGameStore } from "../stores/useGameStore"
+import { getHighScore } from "../utils/highScore"
+import styles from "./EndGameView.module.css"
 
-// note: make sure to call reset() from game store once try again is clicked
 export default function EndGameView() {
+  const { score, sessionToken, statCategory } = useGameStore.getState()
+  const reset = useGameStore((state) => state.reset)
+  const { history, loading } = useGameHistory(sessionToken)
+  const highScore = getHighScore(statCategory)
+  
+  const isNewHighScore = score >= highScore
+
   return(
     <div className={styles.overlay}>
-      <EndGameWidget />
+      <div className={styles.panel}>
+        <span className={styles.title}>Game over... Your score was:</span>
+        <span className={styles.score}>{score}</span>
+
+        {isNewHighScore
+          ? <span><b>New High Score!</b></span>
+          : <span>High Score: <b>{highScore}</b></span>
+        }
+
+        {loading && <span className={styles.loading}>Loading...</span>}
+
+        {history && <RoundHistoryWidget rounds={history.rounds} />}
+
+        <MenuButtonWidget 
+          text="Play Again" 
+          clickEvent={reset} 
+          height="5vh"
+        />
+
+      </div>
     </div>
   )
 }
