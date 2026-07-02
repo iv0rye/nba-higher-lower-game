@@ -55,6 +55,7 @@ export default function EndGameWidget() {
             </div>
 
           </div>
+          
         ))}
       </div>
 
