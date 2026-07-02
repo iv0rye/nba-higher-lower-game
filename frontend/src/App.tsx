@@ -8,6 +8,7 @@ import UIOverlayView from './views/UIOverlayView'
 import MenuView from './views/MenuView'
 import { Route, Routes } from 'react-router-dom'
 import EndGameView from './views/EndGameView'
+import PageNotFoundView from './views/PageNotFoundView'
 
 export default function App() {
   const { keys } = useKeys()
@@ -33,30 +34,29 @@ export default function App() {
 
   return (
     <KeysContext.Provider value={keys}>
-      
-      {!loaded && <LoadingScreenView onLoaded={() => setLoaded(true)}/>}
+      <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+        {!loaded && <LoadingScreenView onLoaded={() => setLoaded(true)}/>}
 
-      <Routes>
-        <Route path="/" element={
-          <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
-            
-            <GameView />
+        <GameView />
 
-            {loaded && gameState === 'menu' && <MenuView />}
+        <Routes>
+          
+          <Route path="/" element={
+            <>
+              {loaded && gameState === 'menu' && <MenuView />}
 
-            {loaded && gameState === 'playing' && <UIOverlayView />}
-            
-            {loaded && gameState === 'gameover' && <EndGameView />}
-          </div>
-        } />
+              {loaded && gameState === 'playing' && <UIOverlayView />}
+              
+              {loaded && gameState === 'gameover' && <EndGameView />}
+            </>
+          } />
 
-        <Route path="/tutorial" element={
-          <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
-            temporary
-          </div>
-        } />
-      </Routes>
+          <Route path="*" element={
+            <PageNotFoundView />
+          } />
 
+        </Routes>
+      </div>
     </KeysContext.Provider>
   )
 }
