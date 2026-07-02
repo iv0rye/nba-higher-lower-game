@@ -13,3 +13,7 @@
 body {
   overflow: hidden;
 }
+
+body.playing {
+  cursor: none;
+}

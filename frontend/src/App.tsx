@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useKeys } from './hooks/useKeys'
 import { useGameStore } from './stores/useGameStore'
 import GameView from './views/GameView'
@@ -13,6 +13,23 @@ export default function App() {
   const { keys } = useKeys()
   const gameState = useGameStore((state) => state.gameState)
   const [loaded, setLoaded] = useState(false)
+
+  // disables mouse and context menu which playing
+  useEffect(() => {
+    const isPlaying = gameState === 'playing'
+    
+    document.body.classList.toggle('playing', isPlaying)
+
+    const disableRightClick = (e: MouseEvent) => e.preventDefault()
+    
+    if (isPlaying) {
+      document.addEventListener('contextmenu', disableRightClick)
+    }
+
+    return () => {
+      document.removeEventListener('contextmenu', disableRightClick)
+    }
+  }, [gameState])
 
   return (
     <KeysContext.Provider value={keys}>
