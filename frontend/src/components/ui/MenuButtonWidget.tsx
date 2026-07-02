@@ -1,3 +1,4 @@
+import sounds from "../../audio/sounds"
 import styles from "./MenuButtonWidget.module.css"
 
 interface MenuButtonWidgetProps {
@@ -15,7 +16,11 @@ export default function MenuButtonWidget({ text, clickEvent=() => {}, height, as
         height: height,
         aspectRatio: aspectRatio,
       }}
-      onClick={clickEvent}
+      onClick={() => {
+        sounds.select.play()
+        clickEvent?.()
+      }}
+      onMouseEnter={() => sounds.hover.play()}
     >
       {text}
     </button>
