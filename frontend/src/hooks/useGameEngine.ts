@@ -2,6 +2,7 @@ import { useCallback } from "react"
 import { useGameStore } from "../stores/useGameStore"
 import { startGame, submitGuess } from "../api/game"
 import { useSettingsStore } from "../stores/useSettingsStore"
+import { saveHighScore } from "../utils/highScore"
 
 export function useGameEngine() {
 	const loadRound = useGameStore((state) => state.loadRound)
@@ -52,6 +53,8 @@ export function useGameEngine() {
 		if (nextRound) {
 			loadRound(nextRound)
 		} else {
+			const { score } = useGameStore.getState()
+			saveHighScore(score)
 			setGameState('gameover')
 			setPhase('gameover')
 		}
