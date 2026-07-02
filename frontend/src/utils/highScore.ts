@@ -1,15 +1,21 @@
-const HIGH_SCORE_KEY = 'nba_higher_lower_high_score'
+// src/utils/highScore.ts
+const getKey = (category: string) => 
+  `nba_higher_lower_high_score_${category}`
 
-export function getHighScore(): number {
-  const stored = localStorage.getItem(HIGH_SCORE_KEY)
+export function getHighScore(category: string | null): number {
+  if (!category) return 0
+
+  const stored = localStorage.getItem(getKey(category))
 
   return stored ? parseInt(stored) : 0
 }
 
-export function saveHighScore(score: number): void {
-  const current = getHighScore()
+export function saveHighScore(score: number, category: string | null): void {
+	if (!category) return
+
+  const current = getHighScore(category)
 
   if (score > current) {
-    localStorage.setItem(HIGH_SCORE_KEY, score.toString())
+    localStorage.setItem(getKey(category), score.toString())
   }
 }

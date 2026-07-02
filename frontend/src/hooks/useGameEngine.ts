@@ -53,8 +53,8 @@ export function useGameEngine() {
 		if (nextRound) {
 			loadRound(nextRound)
 		} else {
-			const { score } = useGameStore.getState()
-			saveHighScore(score)
+			const { score, statCategory } = useGameStore.getState()
+			saveHighScore(score, statCategory)
 			setGameState('gameover')
 			setPhase('gameover')
 		}

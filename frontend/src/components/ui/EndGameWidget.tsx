@@ -12,10 +12,10 @@ function getGuessLabel(round: GetGameRoundResponse): string {
 }
 
 export default function EndGameWidget() {
-  const { score, sessionToken } = useGameStore.getState()
+  const { score, sessionToken, statCategory } = useGameStore.getState()
   const reset = useGameStore((state) => state.reset)
   const { history, loading } = useGameHistory(sessionToken)
-  const highScore = getHighScore()
+  const highScore = getHighScore(statCategory)
   
   const isNewHighScore = score >= highScore
 
