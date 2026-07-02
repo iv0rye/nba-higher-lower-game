@@ -12,6 +12,7 @@ import PageNotFoundView from './views/PageNotFoundView'
 import ShareGameView from './views/ShareGameView'
 import sounds from './audio/sounds'
 import { useSettingsStore } from './stores/useSettingsStore'
+import MuteAudioView from './views/MuteAudioView'
 
 export default function App() {
   const { keys } = useKeys()
@@ -57,11 +58,15 @@ export default function App() {
 
   return (
     <KeysContext.Provider value={keys}>
-      <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+      <div className="overlay">
         {!loaded && <LoadingScreenView onLoaded={() => setLoaded(true)}/>}
 
         <GameView />
 
+        <div style={{ position: 'absolute', bottom: '1vh', left: '1vh', zIndex: 20 }}>
+          <MuteAudioView />
+        </div>
+        
         <Routes>
 
           <Route path="/" element={
@@ -83,6 +88,7 @@ export default function App() {
           } />
 
         </Routes>
+        
       </div>
     </KeysContext.Provider>
   )

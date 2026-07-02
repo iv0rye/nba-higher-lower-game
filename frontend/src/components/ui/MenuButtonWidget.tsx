@@ -1,14 +1,16 @@
 import sounds from "../../audio/sounds"
 import styles from "./MenuButtonWidget.module.css"
+import type { ReactNode } from "react"
 
 interface MenuButtonWidgetProps {
-  text: string
+  icon?: ReactNode
+  text?: string
   clickEvent?: () => void
   height?: string
   aspectRatio?: string
 }
 
-export default function MenuButtonWidget({ text, clickEvent=() => {}, height, aspectRatio }: MenuButtonWidgetProps) {
+export default function MenuButtonWidget({ icon, text="", clickEvent=() => {}, height, aspectRatio }: MenuButtonWidgetProps) {
   return(
     <button 
       className={styles.button}
@@ -22,6 +24,7 @@ export default function MenuButtonWidget({ text, clickEvent=() => {}, height, as
       }}
       onMouseEnter={() => sounds.hover.play()}
     >
+      {icon}
       {text}
     </button>
   )

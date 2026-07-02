@@ -30,7 +30,7 @@ export default function SessionShareWidget({ sessionToken }: SessionShareWidgetP
   return (
     <div className={styles.panel}>
       <span className={styles.label}>Share this game with a friend:</span>
-      <button onClick={handleCopyClick}>
+      <button className={styles.copyButton} onClick={handleCopyClick}>
         {label}
       </button>
     </div>
