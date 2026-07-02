@@ -1,0 +1,30 @@
+.panel {
+  height: 30vh;
+	aspect-ratio: 2 / 3;
+
+  border-style: solid;
+  border-image: url(/ui/panel_menu.png);
+  border-image-slice: 40 40 40 40 fill;
+  border-image-repeat: stretch;
+  border-width: 20px;
+
+  display: flex;
+	gap: 1vw;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+	padding: 13px;
+}
+
+.title {
+  color: #1a1a2e;
+  font-size: 2vw;
+  font-weight: bold;
+}
+
+.description {
+  color: #1a1a2e;
+  font-size: 1vw;
+  font-weight: bold;
+}
