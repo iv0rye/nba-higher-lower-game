@@ -1,5 +1,6 @@
 import MenuButtonWidget from "../components/ui/MenuButtonWidget"
 import RoundHistoryWidget from "../components/ui/RoundHistoryWidget"
+import SessionShareWidget from "../components/ui/SessionShareWidget"
 import { useGameHistory } from "../hooks/useGameHistory"
 import { useGameStore } from "../stores/useGameStore"
 import { getHighScore } from "../utils/highScore"
@@ -27,6 +28,8 @@ export default function EndGameView() {
         {loading && <span className={styles.loading}>Loading...</span>}
 
         {history && <RoundHistoryWidget rounds={history.rounds} />}
+
+        {sessionToken && <SessionShareWidget sessionToken={sessionToken} />}
 
         <MenuButtonWidget 
           text="Play Again" 
