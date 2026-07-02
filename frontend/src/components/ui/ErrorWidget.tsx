@@ -17,6 +17,8 @@ export default function ErrorWidget({ title, description }: ErrorWidgetProps) {
       <MenuButtonWidget 
         text="Go to Game Menu"
         clickEvent={ () => navigate("/") }
+        height="4vh"
+        aspectRatio="6"
       />
     </div>
   )
